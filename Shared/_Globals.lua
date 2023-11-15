@@ -36,7 +36,7 @@ SELL_ADD_BAG_ROOT = "93165800-7962-4dec-96dc-1310129f6620"
 GOLD = "1c3c9c74-34a1-4685-989e-410dc080be6f"
 --Bag from auto sell UUID
 SELL_ADD_BAG_ITEM = ""
---Durgy ^_^
+--Durgy ^_^ may use one day...
 DURGY_ROOT = "DragonBorn_Male_OriginIntro_dca00de8-eb34-49b5-b65f-668cdf75116b"
 
 --Colors for print functions
