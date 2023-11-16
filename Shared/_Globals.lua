@@ -27,7 +27,8 @@ SQUADIES = {}
 SUMMONIES = {}
 --Holds party + more
 ALLIES = {}
-
+--Generic Pouch
+POUCH = "3e6aac21-333b-4812-a554-376c2d157ba9"
 --Wither UUID
 WITHER = "0133f2ad-e121-4590-b5f0-a79413919805"
 --Bag from auto sell root

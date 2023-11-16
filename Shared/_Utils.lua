@@ -3,6 +3,7 @@ Files = {}
 Table = {}
 Template = {}
 Messages = {}
+Treasure = {}
 
 PrintTypes = {
     INFO = 1,
@@ -79,18 +80,21 @@ function BasicPrint(content, messageType, textColor, customPrefix, rainbowText, 
         end
     end
 end
+
 --- Prints an error message to the console and logs it if logging is enabled.
 --- @param content (any) The content of the error message to be printed and logged.
 --- @param textColor (number|nil) The ANSI color code for the text. Defaults to red if not provided.
 function BasicError(content, textColor)
     BasicPrint(content, "ERROR", textColor)
 end
+
 --- Prints a warning message to the console and logs it if logging is enabled.
 --- @param content (any) The content of the error message to be printed and logged.
 --- @param textColor (number|nil) The ANSI color code for the text. Defaults to yellow if not provided.
 function BasicWarning(content, textColor)
     BasicPrint(content, "WARNING", textColor)
 end
+
 --- Prints a debug message to the console and logs it if logging is enabled.
 --- @param content (any) The content of the error message to be printed and logged.
 --- @param textColor (number|nil) The ANSI color code for the text. Defaults to blue if not provided.
@@ -205,6 +209,7 @@ function Files.LogMessage(message)
         Files.FlushLogBuffer()
     end
 end
+
 --- Flushes the log buffer by appending its content to the log file.
 --- The log buffer is cleared after flushing.
 function Files.FlushLogBuffer()
@@ -215,6 +220,7 @@ function Files.FlushLogBuffer()
         logBuffer = "" -- Clear the buffer
     end
 end
+
 --- Clears the content of the log file specified in the configuration.
 function Files.ClearLogFile()
     local logPath = Config.logPath
@@ -239,6 +245,7 @@ function Table.CheckIfValueExists(tbl, value)
     end
     return false
 end
+
 --- Compares two sets represented as tables and returns the elements that exist in the first set but not in the second set.
 --- @param set1 (table) The first set table for comparison.
 --- @param set2 (table) The second set table for comparison.
@@ -388,6 +395,8 @@ function GetSummonies()
     return summonies
 end
 
+
+
 -- -------------------------------------------------------------------------- --
 --                              String and Names                              --
 -- -------------------------------------------------------------------------- --
@@ -409,7 +418,6 @@ function GetTranslatedName(UUID)
         return "No name"
     end
 end
-
 
 --- Updates the content of a translated string identified by the given handle.
 --- @param handle (string) The handle of the translated string to be updated.
@@ -441,15 +449,14 @@ function StringEmpty(str)
     return not string.match(str, "%S")
 end
 
-
 -- -------------------------------------------------------------------------- --
 --                               Entities stuff                               --
 -- -------------------------------------------------------------------------- --
 
 --- Retrieves entities uuid with a specified component within a given distance from a reference object.
---- @param fromObject (string) The reference object from which to measure distances. If nil, the host character is used.
+--- @param fromObject (string|nil) The reference object from which to measure distances. If nil, the host character is used.
 --- @param component (string) The name of the component to check for in entities.
---- @param maxDistance (number) The maximum distance within which entities should be considered.
+--- @param maxDistance (number|nil) The maximum distance within which entities should be considered. If nil, Defaults to 10
 ---
 --- @return (table) results A table containing information about entities within the specified distance and with the specified component.
 --- Each entry in the table is a table with the following fields:
@@ -494,3 +501,56 @@ Template.GetRootTemplate = Ext.Template.GetRootTemplate
 --Combination of all the GetXTemplate function
 Template.GetTemplate = Ext.Template.GetTemplate
 
+-- -------------------------------------------------------------------------- --
+--                                  Treasures                                 --
+-- -------------------------------------------------------------------------- --
+
+--- Retrieves the treasure table associated with the specified name.
+--- @param treasureTableName (string) The name of the treasure table to retrieve.
+--- @return (table|nil) TreasureTable treasure table associated with the specified name, or nil if not found.
+function Treasure.GetTT(treasureTableName)
+    return Ext.Stats.TreasureTable.GetLegacy(treasureTableName)
+end
+
+
+--- Retrieves the items contained in the specified treasure category.
+--- @param treasureCategoryName (string) The name of the treasure category to retrieve.
+--- @return (table|nil) TreasureCategory items contained in the specified treasure category, or nil if not found.
+function Treasure.GetTC(treasureCategoryName)
+    return Ext.Stats.TreasureCategory.GetLegacy(treasureCategoryName)
+end
+
+--- Generate items from a treasure table
+--- Written by focus, yoinked
+---@param treasureTable string Name of the TT
+---@param target? string Who to give the content to
+---@param level? integer level to use for the TT loot generation
+---@param finder? string idk
+---@param generateInBag? boolean if true will put the content into a bag
+function Treasure.GenerateTreasureTable(treasureTable, target, level, finder, generateInBag)
+    local bag = generateInBag ~= false and Osi.CreateAt(POUCH, 0, 0, 0, 0, 0, "")
+    target = target or Osi.GetHostCharacter()
+
+    if level == nil then
+        if Osi.IsItem(target) == 1 then
+            level = -1
+        else
+            level = Osi.GetLevel(target)
+        end
+    end
+
+    if finder == nil then
+        if Osi.IsItem(target) == 1 then
+            finder = Osi.GetHostCharacter()
+        else
+            finder = target
+        end
+    end
+
+    if bag then
+        Osi.GenerateTreasure(bag, treasureTable, level, finder)
+        Osi.ToInventory(bag, target)
+    else
+        Osi.GenerateTreasure(target, treasureTable, level, finder)
+    end
+end
