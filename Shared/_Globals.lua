@@ -27,6 +27,8 @@ SQUADIES = {}
 SUMMONIES = {}
 --Holds party + more
 ALLIES = {}
+--Generic Wooden Crate
+CRATE="2608a80a-8f97-db81-03ea-23edf96d303d"
 --Generic Pouch
 POUCH = "3e6aac21-333b-4812-a554-376c2d157ba9"
 --Wither UUID
