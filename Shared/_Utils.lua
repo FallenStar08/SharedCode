@@ -46,13 +46,13 @@ local function ConcatOutput(...)
 end
 
 --- Prints a formatted message to the console and logs it if logging is enabled.
---- @param content (any) The content of the message to be printed and logged.
---- @param messageType (string|nil) The type of the message (e.g., "INFO", "ERROR", "WARNING").
+---@param content any The content of the message to be printed and logged.
+---@param messageType? string The type of the message (e.g., "INFO", "ERROR", "WARNING").
 --- Defaults to "INFO" if not provided.
---- @param textColor (number|nil)) The ANSI color code for the text. Defaults to blue if not provided.
---- @param customPrefix (string|nil)) A custom prefix for the message. Defaults to MOD_NAME if not provided.
---- @param rainbowText (boolean|nil)) If true, the text will be displayed in rainbow colors. Defaults to false.
---- @param prefixLength (number|nil)) The length of the prefix. Defaults to 15 if not provided.
+---@param textColor? number The ANSI color code for the text. Defaults to blue if not provided.
+---@param customPrefix? string A custom prefix for the message. Defaults to MOD_NAME if not provided.
+---@param rainbowText? boolean If true, the text will be displayed in rainbow colors. Defaults to false.
+---@param prefixLength? number The length of the prefix. Defaults to 15 if not provided.
 function BasicPrint(content, messageType, textColor, customPrefix, rainbowText, prefixLength)
     prefixLength = prefixLength or 15
     messageType = messageType or "INFO"
@@ -81,31 +81,31 @@ function BasicPrint(content, messageType, textColor, customPrefix, rainbowText, 
     end
 end
 
---- Prints an error message to the console and logs it if logging is enabled.
---- @param content (any) The content of the error message to be printed and logged.
---- @param textColor (number|nil) The ANSI color code for the text. Defaults to red if not provided.
+---Prints an error message to the console and logs it if logging is enabled.
+---@param content any The content of the error message to be printed and logged.
+---@param textColor? number The ANSI color code for the text. Defaults to red if not provided.
 function BasicError(content, textColor)
     BasicPrint(content, "ERROR", textColor)
 end
 
---- Prints a warning message to the console and logs it if logging is enabled.
---- @param content (any) The content of the error message to be printed and logged.
---- @param textColor (number|nil) The ANSI color code for the text. Defaults to yellow if not provided.
+---Prints a warning message to the console and logs it if logging is enabled.
+---@param content any The content of the error message to be printed and logged.
+---@param textColor? number The ANSI color code for the text. Defaults to yellow if not provided.
 function BasicWarning(content, textColor)
     BasicPrint(content, "WARNING", textColor)
 end
 
---- Prints a debug message to the console and logs it if logging is enabled.
---- @param content (any) The content of the error message to be printed and logged.
---- @param textColor (number|nil) The ANSI color code for the text. Defaults to blue if not provided.
+---Prints a debug message to the console and logs it if logging is enabled.
+---@param content any The content of the error message to be printed and logged.
+---@param textColor? number The ANSI color code for the text. Defaults to blue if not provided.
 function BasicDebug(content, textColor)
     BasicPrint(content, "DEBUG", textColor)
 end
 
---- Applies a rainbow color effect to a given string.
---- The ANSI color codes are used to achieve the rainbow effect.
---- @param text (string) The input text to be colored with a rainbow effect.
---- @return (string) coloredText input text with rainbow colors applied.
+---Applies a rainbow color effect to a given string.
+---The ANSI color codes are used to achieve the rainbow effect.
+---@param text string The input text to be colored with a rainbow effect.
+---@return string coloredText input text with rainbow colors applied.
 function GetRainbowText(text)
     local colors = { "31", "33", "32", "36", "35", "34" } -- Red, Yellow, Green, Cyan, Magenta, Blue
     local coloredText = ""
@@ -143,12 +143,12 @@ function JSON.Stringify(data)
     return Ext.Json.Stringify(data)
 end
 
---- Moves a file from the old path to the new path.
---- The content of the file is loaded, saved to the new path, and then the original file is cleared .
---- Mainly used to clear the log file.
---- @param oldPath (string) The path of the file to be moved.
---- @param newPath (string) The destination path for the moved file.
---- @return (boolean) result true if the move operation is successful, otherwise false.
+---Moves a file from the old path to the new path.
+---The content of the file is loaded, saved to the new path, and then the original file is cleared .
+---Mainly used to clear the log file.
+---@param oldPath string The path of the file to be moved.
+---@param newPath string The destination path for the moved file.
+---@return boolean result true if the move operation is successful, otherwise false.
 function Files.Move(oldPath, newPath)
     local content = Files.Load(oldPath)
     if content then
@@ -161,17 +161,17 @@ function Files.Move(oldPath, newPath)
     end
 end
 
---- Converts a Lua table to a JSON formated string and saves it to the specified file path.
---- @param lua_table (table) The Lua table to be converted to JSON.
---- @param filePath (string) The path of the file where the JSON string will be saved.
+---Converts a Lua table to a JSON formated string and saves it to the specified file path.
+---@param lua_table table The Lua table to be converted to JSON.
+---@param filePath string The path of the file where the JSON string will be saved.
 function JSON.LuaTableToFile(lua_table, filePath)
     local json_str = JSON.Stringify(lua_table)
     Files.Save(filePath, json_str)
 end
 
---- Loads a JSON string from a file and parses it into a Lua table.
---- @param filePath (string) The path of the file containing the JSON string.
---- @return (table|nil) table_or_nil Lua table parsed from the JSON string, or nil if parsing fails.
+---Loads a JSON string from a file and parses it into a Lua table.
+---@param filePath string The path of the file containing the JSON string.
+---@return table|nil table_or_nil Lua table parsed from the JSON string, or nil if parsing fails.
 function JSON.LuaTableFromFile(filePath)
     local json_str = Files.Load(filePath)
     if json_str and json_str ~= "" then
@@ -199,7 +199,7 @@ local function GetTimestamp()
 end
 --- Appends a timestamped message to the log buffer.
 --- The log buffer is flushed if its size exceeds the maximum specified above (default is 512).
---- @param message (string) The message to be logged.
+---@param message string The message to be logged.
 function Files.LogMessage(message)
     local logMessage = GetTimestamp() .. " " .. message
     logBuffer = logBuffer .. logMessage .. "\n"
@@ -233,10 +233,10 @@ end
 --                             List & Table stuff                             --
 -- -------------------------------------------------------------------------- --
 
---- Checks if a specific value exists in the given table.
---- @param tbl (table) The table to search for the value.
---- @param value (any) The value to check for existence in the table.
---- @return (boolean) result true if the value exists in the table, otherwise false.
+---Checks if a specific value exists in the given table.
+---@param tbl table The table to search for the value.
+---@param value any The value to check for existence in the table.
+---@return boolean result true if the value exists in the table, otherwise false.
 function Table.CheckIfValueExists(tbl, value)
     for i, v in ipairs(tbl) do
         if v == value then
@@ -246,10 +246,10 @@ function Table.CheckIfValueExists(tbl, value)
     return false
 end
 
---- Compares two sets represented as tables and returns the elements that exist in the first set but not in the second set.
---- @param set1 (table) The first set table for comparison.
---- @param set2 (table) The second set table for comparison.
---- @return (table) diffTable table containing elements from set1 that are not present in set2. If no differences are found, an empty table is returned.
+---Compares two sets represented as tables and returns the elements that exist in the first set but not in the second set.
+---@param set1 table The first set table for comparison.
+---@param set2 table The second set table for comparison.
+---@return table diffTable table containing elements from set1 that are not present in set2. If no differences are found, an empty table is returned.
 function Table.CompareSets(set1, set2)
     local result = {}
 
@@ -388,7 +388,7 @@ function GetSummonies()
     local summons = Osi.DB_PlayerSummons:Get(nil)
     for _, summon in pairs(summons) do
         if #summon[1] > 36 then
-            table.insert(summonies, summon[1])
+            table.insert(summonies, string.sub(summon[1],-36))
         end
     end
     SUMMONIES = summonies
@@ -400,11 +400,11 @@ end
 -- -------------------------------------------------------------------------- --
 --                              String and Names                              --
 -- -------------------------------------------------------------------------- --
---- Retrieves the translated name associated with the specified UUID.
---- The function attempts to resolve the translated string for the display name of the entity with the given UUID.
---- In case of an error during the resolution process, a default error message is logged, and "No name" is returned.
---- @param UUID (string) The UUID of the entity for which the translated name is to be retrieved.
---- @return (string) Name translated name of the entity or "No name" if an error occurs.
+---Retrieves the translated name associated with the specified UUID.
+---The function attempts to resolve the translated string for the display name of the entity with the given UUID.
+---In case of an error during the resolution process, a default error message is logged, and "No name" is returned.
+---@param UUID string The UUID of the entity for which the translated name is to be retrieved.
+---@return string Name translated name of the entity or "No name" if an error occurs.
 function GetTranslatedName(UUID)
     local success, translatedName = pcall(function()
         return Osi.ResolveTranslatedString(Osi.GetDisplayName(UUID))
@@ -419,32 +419,32 @@ function GetTranslatedName(UUID)
     end
 end
 
---- Updates the content of a translated string identified by the given handle.
---- @param handle (string) The handle of the translated string to be updated.
---- @param content (string) The new content for the translated string.
+---Updates the content of a translated string identified by the given handle.
+---@param handle string The handle of the translated string to be updated.
+---@param content string The new content for the translated string.
 function UpdateTranslatedString(handle, content)
     Ext.Loca.UpdateTranslatedString(handle, content)
 end
 
---- Retrieves the content of a translated string identified by the given handle.
---- @param handle (string) The handle of the translated string to be retrieved.
---- @return (string) The content of the translated string.
+---Retrieves the content of a translated string identified by the given handle.
+---@param handle string The handle of the translated string to be retrieved.
+---@return string content The content of the translated string.
 function GetTranslatedString(handle)
     return Ext.Loca.GetTranslatedString(handle)
 end
 
---- Removes trailing numeric characters from the input string.
---- This function is designed for handling UUIDs with trailing underscore and numbers.
---- @param inputString (string) The input string with potential trailing numeric characters.
---- @return (string) outputString string with trailing numeric characters removed.
---- @return (integer) numberOfMatch the total number of matches that occured
+---Removes trailing numeric characters from the input string.
+---This function is designed for handling UUIDs with trailing underscore and numbers.
+---@param inputString string The input string with potential trailing numeric characters.
+---@return string outputString string with trailing numeric characters removed.
+---@return integer numberOfMatch the total number of matches that occured
 function RemoveTrailingNumbers(inputString)
     return inputString:gsub("_%d%d%d$", "")
 end
 
---- Checks if a string is empty or contains only whitespace characters.
---- @param str (string) The string to be checked.
---- @return (boolean) Returns true if the string is empty or contains only whitespace characters; otherwise, returns false.
+---Checks if a string is empty or contains only whitespace characters.
+---@param str string The string to be checked.
+---@return boolean result Returns true if the string is empty or contains only whitespace characters; otherwise, returns false.
 function StringEmpty(str)
     return not string.match(str, "%S")
 end
@@ -454,11 +454,11 @@ end
 -- -------------------------------------------------------------------------- --
 
 --- Retrieves entities uuid with a specified component within a given distance from a reference object.
---- @param fromObject (string|nil) The reference object from which to measure distances. If nil, the host character is used.
---- @param component (string) The name of the component to check for in entities.
---- @param maxDistance (number|nil) The maximum distance within which entities should be considered. If nil, Defaults to 10
----
---- @return (table) results A table containing information about entities within the specified distance and with the specified component.
+
+---@param fromObject? string The reference object from which to measure distances. If nil, the host character is used.
+---@param component string The name of the component to check for in entities.
+---@param maxDistance? number The maximum distance within which entities should be considered. If nil, Defaults to 10
+---@return table results A table containing information about entities within the specified distance and with the specified component.
 --- Each entry in the table is a table with the following fields:
 ---   - Name (string) The translated name of the entity.
 ---   - UUID (string) The UUID of the entity.
@@ -505,17 +505,17 @@ Template.GetTemplate = Ext.Template.GetTemplate
 --                                  Treasures                                 --
 -- -------------------------------------------------------------------------- --
 
---- Retrieves the treasure table associated with the specified name.
---- @param treasureTableName (string) The name of the treasure table to retrieve.
---- @return (table|nil) TreasureTable treasure table associated with the specified name, or nil if not found.
+---Retrieves the treasure table associated with the specified name.
+---@param treasureTableName (string) The name of the treasure table to retrieve.
+---@return table|nil TreasureTable treasure table associated with the specified name, or nil if not found.
 function Treasure.GetTT(treasureTableName)
     return Ext.Stats.TreasureTable.GetLegacy(treasureTableName)
 end
 
 
 --- Retrieves the items contained in the specified treasure category.
---- @param treasureCategoryName (string) The name of the treasure category to retrieve.
---- @return (table|nil) TreasureCategory items contained in the specified treasure category, or nil if not found.
+---@param treasureCategoryName string The name of the treasure category to retrieve.
+---@return table|nil TreasureCategory items contained in the specified treasure category, or nil if not found.
 function Treasure.GetTC(treasureCategoryName)
     return Ext.Stats.TreasureCategory.GetLegacy(treasureCategoryName)
 end
