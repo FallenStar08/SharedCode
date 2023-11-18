@@ -85,14 +85,14 @@ end
 ---@param content any The content of the error message to be printed and logged.
 ---@param textColor? number The ANSI color code for the text. Defaults to red if not provided.
 function BasicError(content, textColor)
-    BasicPrint(content, "ERROR", textColor)
+    BasicPrint(content, "ERROR", TEXT_COLORS.red)
 end
 
 ---Prints a warning message to the console and logs it if logging is enabled.
 ---@param content any The content of the error message to be printed and logged.
 ---@param textColor? number The ANSI color code for the text. Defaults to yellow if not provided.
 function BasicWarning(content, textColor)
-    BasicPrint(content, "WARNING", textColor)
+    BasicPrint(content, "WARNING", TEXT_COLORS.yellow)
 end
 
 ---Prints a debug message to the console and logs it if logging is enabled.
@@ -388,14 +388,12 @@ function GetSummonies()
     local summons = Osi.DB_PlayerSummons:Get(nil)
     for _, summon in pairs(summons) do
         if #summon[1] > 36 then
-            table.insert(summonies, string.sub(summon[1],-36))
+            table.insert(summonies, string.sub(summon[1], -36))
         end
     end
     SUMMONIES = summonies
     return summonies
 end
-
-
 
 -- -------------------------------------------------------------------------- --
 --                              String and Names                              --
@@ -447,6 +445,23 @@ end
 ---@return boolean result Returns true if the string is empty or contains only whitespace characters; otherwise, returns false.
 function StringEmpty(str)
     return not string.match(str, "%S")
+end
+
+
+---Checks if a string starts with a specified prefix.
+---@param str string The input string to be checked.
+---@param prefix string The prefix to check for at the beginning of the string.
+---@return boolean result if the string starts with the specified prefix, otherwise false.
+function StartsWith(str, prefix)
+    return string.sub(str, 1, string.len(prefix)) == prefix
+end
+
+---Checks if a string ends with a specified suffix.
+---@param str string input string to be checked.
+---@param suffix string suffix to check for at the end of the string.
+---@return boolean result if the string ends with the specified suffix, otherwise false.
+function EndsWith(str, suffix)
+    return string.sub(str, -string.len(suffix)) == suffix
 end
 
 -- -------------------------------------------------------------------------- --
@@ -512,7 +527,6 @@ function Treasure.GetTT(treasureTableName)
     return Ext.Stats.TreasureTable.GetLegacy(treasureTableName)
 end
 
-
 --- Retrieves the items contained in the specified treasure category.
 ---@param treasureCategoryName string The name of the treasure category to retrieve.
 ---@return table|nil TreasureCategory items contained in the specified treasure category, or nil if not found.
@@ -553,4 +567,28 @@ function Treasure.GenerateTreasureTable(treasureTable, target, level, finder, ge
     else
         Osi.GenerateTreasure(target, treasureTable, level, finder)
     end
+end
+
+-- -------------------------------------------------------------------------- --
+--                                   ModVars                                  --
+-- -------------------------------------------------------------------------- --
+--TODO nothing
+---Register Mod variable, kinda like pVars but based
+---@param variableName string name of the variable to register
+---@param config? table see BG3SE api doc fuck this shit
+---@param modUuid? string don't care
+function RegisterModVariable(variableName, config, modUuid)
+    modUuid = modUuid or MOD_UUID
+    Ext.Vars.RegisterModVariable(modUuid, variableName, {Server = true, Client = true, SyncToClient = true})
+end
+
+---@return table modVars Give us our mod's Vars, very cute.
+function GetModVariables()
+    local vars = Ext.Vars.GetModVariables(MOD_UUID)
+    return vars
+end
+
+---Sync things, for nerds.
+function SyncModVariables()
+    Ext.Vars.SyncModVariables(MOD_UUID)
 end
