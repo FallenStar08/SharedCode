@@ -311,6 +311,13 @@ end
 -- -------------------------------------------------------------------------- --
 --                                    Misc                                    --
 -- -------------------------------------------------------------------------- --
+function MeasureExecutionTime(func)
+    local startTime = Ext.Utils.MonotonicTime()
+    func()  -- Execute the provided function
+    local endTime = Ext.Utils.MonotonicTime()
+    local elapsedTime = endTime - startTime
+    return elapsedTime
+end
 
 function AddGoldTo(character, amount)
     Osi.TemplateAddTo(GOLD, character, amount)

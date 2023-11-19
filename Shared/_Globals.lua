@@ -2,6 +2,7 @@ DEBUG_MESSAGES = 3
 MOD_ENABLED = true
 MOD_UUID=ModuleUUID
 PersistentVars = {}
+_=nil
 
 Config = {
     initDone = false,
