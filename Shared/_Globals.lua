@@ -1,6 +1,7 @@
 DEBUG_MESSAGES = 3
 MOD_ENABLED = true
 MOD_UUID=ModuleUUID
+SE_VERSION=Ext.Utils.Version()
 PersistentVars = {}
 _=nil
 
