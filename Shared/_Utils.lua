@@ -402,6 +402,16 @@ function GetSummonies()
     return summonies
 end
 
+function GetBattlies()
+    local battlies = {}
+    local baddies = Osi.DB_Is_InCombat:Get(nil, nil)
+    for _, bad in pairs(baddies) do
+        table.insert(battlies, string.sub(bad[1],-36))
+        print(bad[1])
+        return battlies
+    end
+end
+
 -- -------------------------------------------------------------------------- --
 --                              String and Names                              --
 -- -------------------------------------------------------------------------- --
