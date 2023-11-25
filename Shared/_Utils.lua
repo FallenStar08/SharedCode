@@ -520,18 +520,19 @@ end
 -- -------------------------------------------------------------------------- --
 --                                  Templates                                 --
 -- -------------------------------------------------------------------------- --
+if SE_VERSION>=10 then
+    Template.GetAllCacheTemplates = Ext.Template.GetAllCacheTemplates
+    Template.GetAllLocalCacheTemplates = Ext.Template.GetAllLocalCacheTemplates
+    Template.GetAllLocalTemplates = Ext.Template.GetAllLocalTemplates
+    Template.GetAllRootTemplates = Ext.Template.GetAllRootTemplates
+    Template.GetCacheTemplate = Ext.Template.GetCacheTemplate
+    Template.GetLocalCacheTemplate = Ext.Template.GetLocalCacheTemplate
+    Template.GetLocalTemplate = Ext.Template.GetLocalTemplate
 
-Template.GetAllCacheTemplates = Ext.Template.GetAllCacheTemplates
-Template.GetAllLocalCacheTemplates = Ext.Template.GetAllLocalCacheTemplates
-Template.GetAllLocalTemplates = Ext.Template.GetAllLocalTemplates
-Template.GetAllRootTemplates = Ext.Template.GetAllRootTemplates
-Template.GetCacheTemplate = Ext.Template.GetCacheTemplate
-Template.GetLocalCacheTemplate = Ext.Template.GetLocalCacheTemplate
-Template.GetLocalTemplate = Ext.Template.GetLocalTemplate
-
-Template.GetRootTemplate = Ext.Template.GetRootTemplate
---Combination of all the GetXTemplate function
-Template.GetTemplate = Ext.Template.GetTemplate
+    Template.GetRootTemplate = Ext.Template.GetRootTemplate
+    --Combination of all the GetXTemplate function
+    Template.GetTemplate = Ext.Template.GetTemplate
+end
 
 -- -------------------------------------------------------------------------- --
 --                                  Treasures                                 --
@@ -596,13 +597,12 @@ end
 ---@param modUuid? string don't care
 function RegisterModVariable(variableName, config, modUuid)
     modUuid = modUuid or MOD_UUID
-    Ext.Vars.RegisterModVariable(modUuid, variableName, {Server = true, Client = true, SyncToClient = true})
+    config = config or {}
+    Ext.Vars.RegisterModVariable(modUuid, variableName, config)
 end
 
----@return table modVars Give us our mod's Vars, very cute.
 function GetModVariables()
-    local vars = Ext.Vars.GetModVariables(MOD_UUID)
-    return vars
+    MyVars = Ext.Vars.GetModVariables(MOD_UUID)
 end
 
 ---Sync things, for nerds.
