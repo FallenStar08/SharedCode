@@ -496,9 +496,10 @@ end
 ---   - UUID (string) The UUID of the entity.
 ---   - distance (number) The distance from the reference object to the entity.
 ---   - inventory (boolean) Indicates if the entity is in the inventory (true) or not (false).
-function GetClosestEntitiesFromObjectByComponent(fromObject, component, maxDistance)
+function GetClosestEntitiesFromObjectByComponent(fromObject, component, minDistance, maxDistance)
     local results = {}
     fromObject = fromObject or Osi.GetHostCharacter()
+    minDistance = minDistance or 0
     maxDistance = maxDistance or 10
     local allEntities = Ext.Entity.GetAllEntitiesWithComponent(component)
     for i, v in ipairs(allEntities) do
@@ -509,7 +510,7 @@ function GetClosestEntitiesFromObjectByComponent(fromObject, component, maxDista
             isInInventory = true
             distance = 0
         end
-        if distance <= maxDistance then
+        if distance <= maxDistance and distance >= minDistance then
             table.insert(results,
                 { Name = GetTranslatedName(uuid), UUID = uuid, distance = distance, inventory = isInInventory })
         end
@@ -602,7 +603,7 @@ function RegisterModVariable(variableName, config, modUuid)
 end
 
 function GetModVariables()
-    MyVars = Ext.Vars.GetModVariables(MOD_UUID)
+    return Ext.Vars.GetModVariables(MOD_UUID)
 end
 
 ---Sync things, for nerds.
