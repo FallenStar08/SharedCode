@@ -303,7 +303,7 @@ end
 -- -------------------------------------------------------------------------- --
 --                                    Math                                    --
 -- -------------------------------------------------------------------------- --
-
+--Todo remove this shit it's stupid math.floor is a thing
 function Custom_floor(x)
     return x - x % 1
 end
@@ -481,6 +481,12 @@ function EndsWith(str, suffix)
     return string.sub(str, -string.len(suffix)) == suffix
 end
 
+---Extracts the GUID suffix from a string.
+---@param str string input string from which to extract the GUID.
+---@return string UUIDsuffix with prefix removed.
+function GUID(str)
+    return string.sub(str, -36)
+end
 -- -------------------------------------------------------------------------- --
 --                               Entities stuff                               --
 -- -------------------------------------------------------------------------- --
@@ -490,6 +496,7 @@ end
 ---@param fromObject? string The reference object from which to measure distances. If nil, the host character is used.
 ---@param component string The name of the component to check for in entities.
 ---@param maxDistance? number The maximum distance within which entities should be considered. If nil, Defaults to 10
+---@param minDistance? number The minimum distance within which entities should be considered. If nil, Defaults to 0
 ---@return table results A table containing information about entities within the specified distance and with the specified component.
 --- Each entry in the table is a table with the following fields:
 ---   - Name (string) The translated name of the entity.
