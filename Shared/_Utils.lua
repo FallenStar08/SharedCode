@@ -54,19 +54,20 @@ end
 ---@param rainbowText? boolean If true, the text will be displayed in rainbow colors. Defaults to false.
 ---@param prefixLength? number The length of the prefix. Defaults to 15 if not provided.
 function BasicPrint(content, messageType, textColor, customPrefix, rainbowText, prefixLength)
+    local logLevel = (CONFIG and CONFIG.DEBUG_MESSAGES) or 4
     prefixLength = prefixLength or 15
     messageType = messageType or "INFO"
     local textColorCode = textColor or TEXT_COLORS.blue -- Default to blue
     customPrefix = customPrefix or MOD_NAME
-
-    if Config and Config.config_tbl and Config.config_tbl.LOG_ENABLED == 1 then
+    if CONFIG and CONFIG.LOG_ENABLED == 1 then
         Files.LogMessage(ConcatOutput(ConcatPrefix(customPrefix .. "  [" .. messageType .. "]", content)))
     end
 
-    if DEBUG_MESSAGES <= 0 then
+    if logLevel <= 0 then
         return
     end
-    if PrintTypes[messageType] and DEBUG_MESSAGES >= PrintTypes[messageType] then
+
+    if PrintTypes[messageType] and logLevel >= PrintTypes[messageType] then
         local padding = string.rep(" ", prefixLength - #customPrefix)
         local message = ConcatOutput(ConcatPrefix(customPrefix .. padding .. "  [" .. messageType .. "]", content))
         local coloredMessage = rainbowText and GetRainbowText(message) or
@@ -177,10 +178,10 @@ function JSON.LuaTableFromFile(filePath)
     if json_str and json_str ~= "" then
         return JSON.Parse(json_str)
     else
-        BasicError("JSON.LuaTableFromFile() - Failed to parse JSON from filePath: '" .. (filePath or "") .. "'")
         return nil
     end
 end
+
 
 -- -------------------------------------------------------------------------- --
 --                                    LOGS                                    --
@@ -214,7 +215,7 @@ end
 --- The log buffer is cleared after flushing.
 function Files.FlushLogBuffer()
     if logBuffer ~= "" then
-        local logPath = Config.logPath
+        local logPath = Paths.logPath
         local fileContent = Files.Load(logPath) or ""
         Files.Save(logPath, fileContent .. logBuffer)
         logBuffer = "" -- Clear the buffer
@@ -223,7 +224,7 @@ end
 
 --- Clears the content of the log file specified in the configuration.
 function Files.ClearLogFile()
-    local logPath = Config.logPath
+    local logPath = Paths.logPath
     if Files.Load(logPath) then
         Files.Save(logPath, "")
     end
@@ -286,13 +287,12 @@ end
 
 function Table.ProcessTables(baseTable, keeplistTable, selllistTable)
     -- User Lists only, clear baseTable
-    if Config.config_tbl["CUSTOM_LISTS_ONLY"] >= 1 then baseTable = {} end
+    if CONFIG["CUSTOM_LISTS_ONLY"] >= 1 then baseTable = {} end
 
     --Merge sell entries to the base list
     for name, uid in pairs(selllistTable) do baseTable[name] = uid end
     --Merge keep entries to the base list
     for name, uid in pairs(keeplistTable) do baseTable[name] = nil end
-    BasicDebug("ProcessTables() - Tables processed and set successfully created")
     return baseTable
 end
 

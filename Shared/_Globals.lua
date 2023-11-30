@@ -1,23 +1,21 @@
-DEBUG_MESSAGES = 3
-MOD_ENABLED = true
 MOD_UUID=ModuleUUID
 SE_VERSION=Ext.Utils.Version()
+
+CurrentVersion = string.format("%d.%d.%d.%d",
+Ext.Mod.GetMod(MOD_UUID).Info.ModVersion[1],
+Ext.Mod.GetMod(MOD_UUID).Info.ModVersion[2],
+Ext.Mod.GetMod(MOD_UUID).Info.ModVersion[3],
+Ext.Mod.GetMod(MOD_UUID).Info.ModVersion[4])
+
 PersistentVars = {}
 _=nil
 
-Config = {
-    initDone = false,
-    config_tbl = { MOD_ENABLED = 1 },
+Paths = {
     config_json_file_path = "config.json",
     logPath = "log.txt",
     junk_table_json_file_path = "junk_list.json",
     keeplist_json_file_path = "keep_list.json",
     selllist_json_file_path = "sell_list.json",
-    CurrentVersion = string.format("%d.%d.%d.%d",
-        Ext.Mod.GetMod(MOD_UUID).Info.ModVersion[1],
-        Ext.Mod.GetMod(MOD_UUID).Info.ModVersion[2],
-        Ext.Mod.GetMod(MOD_UUID).Info.ModVersion[3],
-        Ext.Mod.GetMod(MOD_UUID).Info.ModVersion[4]),
 }
 
 --For concat function
