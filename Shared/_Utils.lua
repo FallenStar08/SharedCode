@@ -54,7 +54,7 @@ end
 ---@param rainbowText? boolean If true, the text will be displayed in rainbow colors. Defaults to false.
 ---@param prefixLength? number The length of the prefix. Defaults to 15 if not provided.
 function BasicPrint(content, messageType, textColor, customPrefix, rainbowText, prefixLength)
-    local logLevel = (CONFIG and CONFIG.DEBUG_MESSAGES) or 4
+    local logLevel = (CONFIG and CONFIG.DEBUG_MESSAGES) or 3
     prefixLength = prefixLength or 15
     messageType = messageType or "INFO"
     local textColorCode = textColor or TEXT_COLORS.blue -- Default to blue
@@ -407,7 +407,7 @@ function GetBattlies()
     local baddies = Osi.DB_Is_InCombat:Get(nil, nil)
     for _, bad in pairs(baddies) do
         table.insert(battlies, string.sub(bad[1],-36))
-        print(bad[1])
+        --print(bad[1])
         return battlies
     end
 end
