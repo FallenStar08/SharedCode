@@ -1,3 +1,4 @@
+---@diagnostic disable: duplicate-set-field
 JSON = {}
 Files = {}
 Table = {}
@@ -182,7 +183,6 @@ function JSON.LuaTableFromFile(filePath)
     end
 end
 
-
 -- -------------------------------------------------------------------------- --
 --                                    LOGS                                    --
 -- -------------------------------------------------------------------------- --
@@ -311,22 +311,33 @@ end
 -- -------------------------------------------------------------------------- --
 --                                    Misc                                    --
 -- -------------------------------------------------------------------------- --
+---Measure the execution time of a given function
+---@param func function the function to measure the execution time of
 function MeasureExecutionTime(func)
     local startTime = Ext.Utils.MonotonicTime()
-    func()  -- Execute the provided function
+    func() -- Execute the provided function
     local endTime = Ext.Utils.MonotonicTime()
     local elapsedTime = endTime - startTime
     return elapsedTime
 end
 
+---Add amount of gold to a character
+---@param character string character uuid
+---@param amount integer the amount of gold to add
 function AddGoldTo(character, amount)
     Osi.TemplateAddTo(GOLD, character, amount)
 end
 
+---Remove amount of gold from a character
+---@param character string character uuid
+---@param amount integer the amount of gold to remove
 function RemoveGoldFrom(character, amount)
     Osi.TemplateRemoveFrom(GOLD, character, amount)
 end
 
+---Delay a function call by the given time
+---@param ms integer
+---@param func function
 function DelayedCall(ms, func)
     local Time = 0
     local handler
@@ -340,6 +351,10 @@ function DelayedCall(ms, func)
     end)
 end
 
+---Check if a character is transformed or not
+---@param character string
+---@return boolean isTransformed true if the character is transformed
+---@return string GUID either the character uuid if not transformed or the template of the transformation if it is
 function IsTransformed(character)
     local entity = Ext.Entity.Get(character)
     local transfoUUID = ""
@@ -362,7 +377,8 @@ function IsTransformed(character)
     end
 end
 
---Call on a temporary character to delete it
+---Destroy a character
+---@param character string the uuid of the character to destroy
 function DestroyChar(character)
     Osi.PROC_RemoveAllPolymorphs(character)
     Osi.PROC_RemoveAllDialogEntriesForSpeaker(character)
@@ -375,6 +391,11 @@ function DestroyChar(character)
     end)
 end
 
+-- -------------------------------------------------------------------------- --
+--                             tables of character                            --
+-- -------------------------------------------------------------------------- --
+
+---@return table squadies list of the current party members
 function GetSquadies()
     local squadies = {}
     local players = Osi.DB_Players:Get(nil)
@@ -390,6 +411,7 @@ function GetSquadies()
     return squadies
 end
 
+---@return table summonies a list of all the summons owned by players
 function GetSummonies()
     local summonies = {}
     local summons = Osi.DB_PlayerSummons:Get(nil)
@@ -402,14 +424,44 @@ function GetSummonies()
     return summonies
 end
 
+---get all characters currently involded in a combat
+---@return table battlies all the character involved in a combat
 function GetBattlies()
     local battlies = {}
     local baddies = Osi.DB_Is_InCombat:Get(nil, nil)
     for _, bad in pairs(baddies) do
-        table.insert(battlies, string.sub(bad[1],-36))
+        table.insert(battlies, string.sub(bad[1], -36))
         --print(bad[1])
         return battlies
     end
+end
+
+--TODO FINSIH writing this shit, (check partymember/enemies)
+
+---Returns a list of party members involded in a given combat guid
+---@param guid string the combat guid to check
+---@return table? partyMembers the party members involved in the given combat guid or nil
+function GetPartyMembersInCombatGuid(guid)
+    local combat = Osi.DB_Is_InCombat:Get(nil, guid)
+    local partyMembers = {}
+    for _, partyMember in pairs(combat) do
+        table.insert(partyMembers, GUID(partyMember[1]))
+    end
+    if not next(partyMembers) then return nil end
+    return partyMembers
+end
+
+---Returns a list of enemies involved in a given combat guid
+---@param guid string the combat guid to check
+---@return table? enemies the enemies involved in the given combat guid or nil
+function GetEnemiesInCombatGuid(guid)
+    local combat = Osi.DB_Is_InCombat:Get(nil, guid)
+    local enemies = {}
+    for _, enemy in pairs(combat) do
+        table.insert(enemies, GUID(enemy[1]))
+    end
+    if not next(enemies) then return nil end
+    return enemies
 end
 
 -- -------------------------------------------------------------------------- --
@@ -422,13 +474,14 @@ end
 ---@return string Name translated name of the entity or "No name" if an error occurs.
 function GetTranslatedName(UUID)
     local success, translatedName = pcall(function()
-        return Osi.ResolveTranslatedString(Osi.GetDisplayName(UUID))
+        return GetTranslatedString(Osi.GetDisplayName(UUID))
     end)
 
     -- Handle errors by logging a basic debug message and returning a default "No name" string.
     if success then
         return translatedName
     else
+        --Not really an error...
         BasicDebug("Error in GetTranslatedName: " .. translatedName)
         return "No name"
     end
@@ -464,7 +517,6 @@ function StringEmpty(str)
     return not string.match(str, "%S")
 end
 
-
 ---Checks if a string starts with a specified prefix.
 ---@param str string The input string to be checked.
 ---@param prefix string The prefix to check for at the beginning of the string.
@@ -487,6 +539,7 @@ end
 function GUID(str)
     return string.sub(str, -36)
 end
+
 -- -------------------------------------------------------------------------- --
 --                               Entities stuff                               --
 -- -------------------------------------------------------------------------- --
@@ -528,7 +581,7 @@ end
 -- -------------------------------------------------------------------------- --
 --                                  Templates                                 --
 -- -------------------------------------------------------------------------- --
-if SE_VERSION>=10 then
+if SE_VERSION >= 10 then
     Template.GetAllCacheTemplates = Ext.Template.GetAllCacheTemplates
     Template.GetAllLocalCacheTemplates = Ext.Template.GetAllLocalCacheTemplates
     Template.GetAllLocalTemplates = Ext.Template.GetAllLocalTemplates
@@ -548,14 +601,14 @@ end
 
 ---Retrieves the treasure table associated with the specified name.
 ---@param treasureTableName (string) The name of the treasure table to retrieve.
----@return table|nil TreasureTable treasure table associated with the specified name, or nil if not found.
+---@return table? TreasureTable treasure table associated with the specified name, or nil if not found.
 function Treasure.GetTT(treasureTableName)
     return Ext.Stats.TreasureTable.GetLegacy(treasureTableName)
 end
 
 --- Retrieves the items contained in the specified treasure category.
 ---@param treasureCategoryName string The name of the treasure category to retrieve.
----@return table|nil TreasureCategory items contained in the specified treasure category, or nil if not found.
+---@return table? TreasureCategory items contained in the specified treasure category, or nil if not found.
 function Treasure.GetTC(treasureCategoryName)
     return Ext.Stats.TreasureCategory.GetLegacy(treasureCategoryName)
 end
@@ -592,6 +645,18 @@ function Treasure.GenerateTreasureTable(treasureTable, target, level, finder, ge
         Osi.ToInventory(bag, target)
     else
         Osi.GenerateTreasure(target, treasureTable, level, finder)
+    end
+end
+
+-- -------------------------------------------------------------------------- --
+--                                    ITEMS                                   --
+-- -------------------------------------------------------------------------- --
+
+function HasItem(character,root )
+    if Osi.TemplateIsInInventory(root, character) >= 1 then
+        return true
+    else
+        return false
     end
 end
 
