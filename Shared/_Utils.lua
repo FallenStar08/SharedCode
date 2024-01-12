@@ -123,24 +123,40 @@ end
 -- File I/O Stuff credit to the kv camp event author, I basically just made their code/functions worse --
 -- ------------------------------------------------------------------------------------------------------
 
+--- Saves the given content to the specified file path.
+--- @param path string The path to save the file to, relative to the mod folder.
+--- @param content string The content to save to the file.
+--- @return boolean result True if the save was successful, false otherwise.
 function Files.Save(path, content)
     path = Files.Path(path)
     return Ext.IO.SaveFile(path, content)
 end
 
+--- Loads the content of the file at the given path.
+--- @param path string The path of the file to load, relative to the mod folder.
 function Files.Load(path)
     path = Files.Path(path)
     return Ext.IO.LoadFile(path)
 end
 
+--- Concatenates the folder name and file path to get the full path.
+---@param filePath string The file path relative to the folder.
+---@return string fullPath The full path including the folder name.
 function Files.Path(filePath)
     return FOLDER_NAME .. "/" .. filePath
 end
 
+--- Parses a JSON string into a Lua table.
+---@param json_str string The JSON string to parse.
+---@return table
 function JSON.Parse(json_str)
     return Ext.Json.Parse(json_str)
 end
 
+
+--- Stringifies the given Lua data structure into a JSON string.
+---@param data any The data to stringify
+---@return string The JSON string representation of the input data
 function JSON.Stringify(data)
     return Ext.Json.Stringify(data)
 end
@@ -187,6 +203,7 @@ end
 --                                    LOGS                                    --
 -- -------------------------------------------------------------------------- --
 
+
 local logBuffer = ""         -- Initialize an empty log buffer
 local logBufferMaxSize = 512 -- Maximum buffer size before flushing
 local function GetTimestamp()
@@ -198,6 +215,7 @@ local function GetTimestamp()
     return string.format("[%02d:%02d:%02d.%03d]",
         hours, minutes, seconds, milliseconds)
 end
+
 --- Appends a timestamped message to the log buffer.
 --- The log buffer is flushed if its size exceeds the maximum specified above (default is 512).
 ---@param message string The message to be logged.
@@ -592,11 +610,17 @@ end
 -- -------------------------------------------------------------------------- --
 --                               Entities stuff                               --
 -- -------------------------------------------------------------------------- --
+function EntityToUuid(entity)
+    return Ext.Entity.HandleToUuid(entity)
+end
+function _GE(uuid)
+    return Ext.Entity.Get(uuid)
+end
 
 --- Retrieves entities uuid with a specified component within a given distance from a reference object.
 
 ---@param fromObject? string The reference object from which to measure distances. If nil, the host character is used.
----@param component string The name of the component to check for in entities.
+---@param component ExtComponentType The name of the component to check for in entities.
 ---@param maxDistance? number The maximum distance within which entities should be considered. If nil, Defaults to 10
 ---@param minDistance? number The minimum distance within which entities should be considered. If nil, Defaults to 0
 ---@return table results A table containing information about entities within the specified distance and with the specified component.
@@ -718,12 +742,12 @@ function DeepIterateInventory(entity, tagFilter, processedInventory)
         local isContainer = item.InventoryOwner ~= nil
         local StackMember = item.InventoryStackMember
         local data = {
-            template = Osi.GetTemplate(item.Uuid.EntityUuid) or "TemplateError", 
+            template = Osi.GetTemplate(item.Uuid and item.Uuid.EntityUuid) or "TemplateError",
             tags = item.Tag.Tags or {},
             statsId = item.Data.StatsId or "StatsIdError",
-            amount = Osi.GetStackAmount(item.Uuid.EntityUuid) or "AmountError"
+            amount = Osi.GetStackAmount(item.Uuid.EntityUuid) or 0
         }
-        local uuid = item.Uuid.EntityUuid or nil
+        local uuid = item.Uuid and item.Uuid.EntityUuid or nil
 
         -- Check if the item has all the specified tags
         if tagFilter and not Table.CheckIfAllValuesExist(data.tags, tagFilter) then
@@ -740,7 +764,7 @@ function DeepIterateInventory(entity, tagFilter, processedInventory)
                     statsId = stackElement.Data.StatsId or "StatsIdError",
                     amount = Osi.GetStackAmount(stackElement.Uuid.EntityUuid) or "AmountError"
                 }
-                local stackUuid = stackElement.Uuid.EntityUuid
+                local stackUuid = stackElement.Uuid and stackElement.Uuid.EntityUuid
 
                 -- Check if the item has all the specified tags
                 if tagFilter and not Table.CheckIfAllValuesExist(stackData.tags, tagFilter) then
@@ -795,5 +819,28 @@ end
 
 ---Sync things, for nerds.
 function SyncModVariables()
+    Ext.Vars.DirtyModVariables(MOD_UUID)
     Ext.Vars.SyncModVariables(MOD_UUID)
 end
+
+-- -------------------------------------------------------------------------- --
+--                                 Custom Vars                                --
+-- -------------------------------------------------------------------------- --
+--TODO nothing
+---Register User variable, your home made component basically.
+---@param variableName string name of the variable to register
+---@param config? table see BG3SE api doc fuck this shit
+function RegisterUserVariable(variableName, config)
+    config = config or {}
+    Ext.Vars.RegisterUserVariable(variableName,config)
+end
+
+---Sync things, for nerds.
+function SyncUserVariables()
+    Ext.Vars.DirtyUserVariables()
+    Ext.Vars.SyncUserVariables()
+end
+
+-- -------------------------------------------------------------------------- --
+--                                   EVENTS                                   --
+-- -------------------------------------------------------------------------- --
