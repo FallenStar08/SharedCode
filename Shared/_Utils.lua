@@ -759,7 +759,7 @@ function DeepIterateInventory(entity, tagFilter, processedInventory)
             local itemStack = StackMember.Stack.InventoryStack.Arr_u64
             for _, stackElement in pairs(itemStack) do
                 local stackData = {
-                    template = stackElement.ServerItem.Item.Template.Id or "TemplateError",
+                    template = stackElement.ServerItem.Template.Id or "TemplateError",
                     tags = stackElement.Tag.Tags or {},
                     statsId = stackElement.Data.StatsId or "StatsIdError",
                     amount = Osi.GetStackAmount(stackElement.Uuid.EntityUuid) or "AmountError"
