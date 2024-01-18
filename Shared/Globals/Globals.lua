@@ -1,11 +1,11 @@
-MOD_UUID = ModuleUUID
+--MOD_UUID = ModuleUUID
 SE_VERSION = Ext.Utils.Version()
 
-CurrentVersion = string.format("%d.%d.%d.%d",
-    Ext.Mod.GetMod(MOD_UUID).Info.ModVersion[1],
-    Ext.Mod.GetMod(MOD_UUID).Info.ModVersion[2],
-    Ext.Mod.GetMod(MOD_UUID).Info.ModVersion[3],
-    Ext.Mod.GetMod(MOD_UUID).Info.ModVersion[4])
+-- CurrentVersion = string.format("%d.%d.%d.%d",
+--     Ext.Mod.GetMod(MOD_UUID).Info.ModVersion[1],
+--     Ext.Mod.GetMod(MOD_UUID).Info.ModVersion[2],
+--     Ext.Mod.GetMod(MOD_UUID).Info.ModVersion[3],
+--     Ext.Mod.GetMod(MOD_UUID).Info.ModVersion[4])
 
 PersistentVars = {}
 _ = nil
@@ -21,6 +21,18 @@ Paths = {
 --For concat function
 MAX_PREFIX_LENGTH = 25
 
+ORIGINS = {
+    ["Wyll"] = "S_Player_Wyll_c774d764-4a17-48dc-b470-32ace9ce447d",
+    ["ShadowHeart"] = "S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679",
+    ["Laezel"] = "S_Player_Laezel_58a69333-40bf-8358-1d17-fff240d7fb12",
+    ["Astarion"] = "S_Player_Astarion_c7c13742-bacd-460a-8f65-f864fe41f255",
+    ["Gale"] = "S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604",
+    ["Jaheira"] = "S_Player_Jaheira_91b6b200-7d00-4d62-8dc9-99e8339dfa1a",
+    ["Minsc"] = "S_Player_Minsc_0de603c5-42e2-4811-9dad-f652de080eba",
+    ["Karlach"] = "S_Player_Karlach_2c76687d-93a2-477b-8b18-8a14b549304c",
+    ["Minty"] = "Elves_Female_Drow_Lolth_Player_9d85d0f6-5231-4738-a674-bf28ff19e515",
+    ["BearDude"] = "S_GLO_Halsin_7628bc0e-52b8-42a7-856a-13a6fd413323",
+}
 --Holds current party
 SQUADIES = {}
 --Holds summons
@@ -69,7 +81,7 @@ BACKGROUND_COLORS = {
 }
 
 FALLEN_TAGS = {
-    ["FALLEN_ARMOR"]="93d8c08c-9bf9-4049-b80e-9533ec9ff530",
+    ["FALLEN_ARMOR"] = "93d8c08c-9bf9-4049-b80e-9533ec9ff530",
     ["FALLEN_DYE"] = "fe0efdad-d6ee-4a8c-b4ae-a22a6c15bc25",
     ["FALLEN_WEAPON"] = "5ebf8be6-76f9-4b49-a016-a00a03feab58",
     ["FALLEN_VANITY"] = "54e0d178-c5cb-4007-9434-3478ecfb6e1c",

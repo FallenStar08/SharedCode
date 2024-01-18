@@ -1,8 +1,9 @@
 -- -------------------------------------------------------------------------- --
 --                             Config IO functions                            --
 -- -------------------------------------------------------------------------- --
+local default_config_tbl={}
 
-local default_config_tbl = Ext.Require("Server/_DefaultTables.lua") or {}
+
 
 local CONFIG = {
     data = {},
@@ -67,7 +68,7 @@ function CONFIG:checkStructure()
 end
 
 function CONFIG:upgrade()
-    self.data["VERSION"] = CurrentVersion
+    self.data["VERSION"] = MOD_INFO.VERSION
     self.__configChanged = true
     self:save()
 end
@@ -75,8 +76,8 @@ end
 function CONFIG:init()
     Files.ClearLogFile()
     BasicPrint(
-        string.format("Config.Init() - %s mod by FallenStar VERSION : %s starting up... ", MOD_NAME,
-            CurrentVersion),
+        string.format("Config.Init() - %s mod by FallenStar VERSION : %s starting up... ", MOD_INFO.MOD_NAME,
+        MOD_INFO.VERSION),
         "INFO", nil, nil, true)
 
     -- Load the config from the file or create a new one if it doesn't exist
@@ -85,7 +86,7 @@ function CONFIG:init()
     -- Check the Config Structure and correct it if needed
     self:checkStructure()
 
-    if self.data.VERSION ~= CurrentVersion then
+    if self.data.VERSION ~= MOD_INFO.VERSION then
         BasicWarning("Config.Init() - Detected version mismatch, upgrading file...")
         self:upgrade()
     else
@@ -96,23 +97,30 @@ function CONFIG:init()
     BasicDebug(self)
 end
 
-setmetatable(CONFIG, {
-    __index = function(self, key)
-        return self.data[key]
-    end,
-    __newindex = function(self, key, value)
-        self.data[key] = value
-        self.__configChanged = true
-        self:save(Paths.config_json_file_path)
-    end,
 
-    __tostring = function(self)
-        return JSON.Stringify(self.data)
-    end
-})
 
 function InitConfig()
+    if MOD_INFO then
+        default_config_tbl=MOD_INFO.DEFAULT_CONFIG
+        default_config_tbl["VERSION"]=MOD_INFO.VERSION
+        setmetatable(CONFIG, {
+            __index = function(self, key)
+                return self.data[key]
+            end,
+            __newindex = function(self, key, value)
+                self.data[key] = value
+                self.__configChanged = true
+                self:save(Paths.config_json_file_path)
+            end,
+        
+            __tostring = function(self)
+                return JSON.Stringify(self.data)
+            end
+        })
+        if not default_config_tbl then return end
+    else
+        return
+    end
     CONFIG:init()
-    _G.CONFIG=CONFIG
     return CONFIG
 end
