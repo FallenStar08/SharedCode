@@ -26,7 +26,7 @@ function ModInfo:new(folderName, modName, requireConfig, defaultModConfigTable)
         REQUIRE_CONFIG = requireConfig,
         DEFAULT_CONFIG=defaultModConfigTable,
         MOD_UUID = ModuleUUID,
-        CurrentVersion = string.format("%d.%d.%d.%d",
+        VERSION = string.format("%d.%d.%d.%d",
             Ext.Mod.GetMod(ModuleUUID).Info.ModVersion[1],
             Ext.Mod.GetMod(ModuleUUID).Info.ModVersion[2],
             Ext.Mod.GetMod(ModuleUUID).Info.ModVersion[3],

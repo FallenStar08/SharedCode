@@ -102,7 +102,7 @@ end
 function InitConfig()
     if MOD_INFO then
         default_config_tbl=MOD_INFO.DEFAULT_CONFIG
-        default_config_tbl["VERSION"]=MOD_INFO.VERSION
+        default_config_tbl["VERSION"]=MOD_INFO.VERSION or "1"
         setmetatable(CONFIG, {
             __index = function(self, key)
                 return self.data[key]
