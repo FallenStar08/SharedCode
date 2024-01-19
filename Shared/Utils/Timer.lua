@@ -14,6 +14,7 @@ end
 ---@param ms integer
 ---@param func function
 function DelayedCall(ms, func)
+    if ms == 0 then func() return end
     local Time = 0
     local handler
     handler = Ext.Events.Tick:Subscribe(function(e)

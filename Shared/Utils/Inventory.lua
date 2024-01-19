@@ -4,14 +4,17 @@
 --                                  INVENTORY                                 --
 -- -------------------------------------------------------------------------- --
 
+
 --- Recursively iterates through an entity's inventory and all sub-inventories, building a table containing all items.
 ---@param entity any The entity whose inventory to iterate
 ---@param processedInventory? table Table to accumulate results
 ---@param tagFilter? table The table of tags to filter items (optional)
----@return table processedInventory Table containing all items in entity's inventory tree table format: 
+---@param templateFilter? table The table of templates to filter items (optional)
+---@return table processedInventory Table containing all items in entity's inventory tree table format:
 ---["uuid"]={amount(int), statsId(str), tags(table), template(str)}
-function DeepIterateInventory(entity, tagFilter, processedInventory)
+function DeepIterateInventory(entity, tagFilter, templateFilter, processedInventory)
     tagFilter = tagFilter or nil
+    templateFilter = templateFilter or nil
     processedInventory = processedInventory or {}
     local entityInventory = entity.InventoryOwner.PrimaryInventory
     local entityItemsList = entityInventory.InventoryContainer.Items
@@ -21,16 +24,22 @@ function DeepIterateInventory(entity, tagFilter, processedInventory)
         local isContainer = item.InventoryOwner ~= nil
         local StackMember = item.InventoryStackMember
         local data = {
-            template = Osi.GetTemplate(item.Uuid and item.Uuid.EntityUuid) or "TemplateError",
+            template = GUID(Osi.GetTemplate(item.Uuid and item.Uuid.EntityUuid)) or "TemplateError",
             tags = item.Tag.Tags or {},
             statsId = item.Data.StatsId or "StatsIdError",
-            amount = Osi.GetStackAmount(item.Uuid.EntityUuid) or 0
+            amount = Osi.GetStackAmount(item.Uuid and item.Uuid.EntityUuid) or 0
         }
         local uuid = item.Uuid and item.Uuid.EntityUuid or nil
 
         -- Check if the item has all the specified tags
         if tagFilter and not Table.CheckIfAllValuesExist(data.tags, tagFilter) then
             -- Skip this item if it doesn't match all tags in the filter
+            goto continue
+        end
+
+        -- Check if the item's template matches at least one of the specified templates
+        if templateFilter and not Table.ContainsAny(templateFilter, data.template) then
+            -- Skip this item if it doesn't match any template in the filter
             goto continue
         end
 
@@ -51,6 +60,12 @@ function DeepIterateInventory(entity, tagFilter, processedInventory)
                     goto continue_stack
                 end
 
+                -- Check if the item's template matches at least one of the specified templates
+                if templateFilter and not Table.ContainsAny(templateFilter, stackData.template) then
+                    -- Skip this stack item if it doesn't match any template in the filter
+                    goto continue_stack
+                end
+
                 processedInventory[stackUuid] = stackData
 
                 ::continue_stack::
@@ -62,18 +77,36 @@ function DeepIterateInventory(entity, tagFilter, processedInventory)
         ::continue::
 
         if isContainer then
-            DeepIterateInventory(item, tagFilter, processedInventory)
+            DeepIterateInventory(item, tagFilter, templateFilter, processedInventory)
         end
     end
 
     return processedInventory
 end
 
-
-function HasItemTemplate(character,root )
+---Check if a character has an item by template
+---@param character CHARACTER
+---@param root ROOT
+---@return boolean
+function HasItemTemplate(character, root)
     if Osi.TemplateIsInInventory(root, character) >= 1 then
         return true
     else
         return false
     end
+end
+---Give Item to each party member if they don't have it already
+---@param itemTemplate ROOT
+---@return boolean result true if an item was given
+function GiveItemToEachPartyMember(itemTemplate)
+    local hasGivenPotion = false
+    GetSquadies()
+    for _, player in pairs(SQUADIES) do
+        if not HasItemTemplate(player, itemTemplate) then
+            Osi.TemplateAddTo(itemTemplate, player, 1, 1)
+            hasGivenPotion = true
+        end
+    end
+    if hasGivenPotion then return true end
+    return false
 end

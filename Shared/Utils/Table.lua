@@ -11,6 +11,9 @@ Table = {}
 ---@param valueList table The list of values to find inside the table
 ---@return boolean True if all values in the valueList are present, false otherwise
 function Table.CheckIfAllValuesExist(tbl, valueList)
+    if not (tbl and valueList) then
+        return false
+    end
     for _, element in pairs(valueList) do
         local found = false
         for _, t in pairs(tbl) do
@@ -105,7 +108,7 @@ function Table.MergeSets(set1, set2)
     -- Merge set1 into mergedSet
     for key, value in pairs(set1) do
         if mergedSet[key] then
-            BasicError("Key '" .. key .. "' already exists in the merged set.")
+            --BasicError("Key '" .. key .. "' already exists in the merged set.")
         else
             mergedSet[key] = value
         end
@@ -114,10 +117,24 @@ function Table.MergeSets(set1, set2)
     -- Merge set2 into mergedSet
     for key, value in pairs(set2) do
         if mergedSet[key] then
-            BasicError("Key '" .. key .. "' already exists in the merged set.")
+            --BasicError("Key '" .. key .. "' already exists in the merged set.")
         else
             mergedSet[key] = value
         end
     end
     return mergedSet
+end
+
+--- Checks if a  string is present in the array of  UUIDs.
+---@param target table The table containing strings to search.
+---@param value string The string to check for presence in the target table.
+---@return boolean result true if the value is found in the target table, false otherwise.
+function Table.ContainsAny(target, value)
+    if not(target and value) then return false end
+    for _, templateUuid in ipairs(target) do
+        if templateUuid == value then
+            return true
+        end
+    end
+    return false
 end
