@@ -27,7 +27,8 @@ function DeepIterateInventory(entity, tagFilter, templateFilter, processedInvent
             template = GUID(Osi.GetTemplate(item.Uuid and item.Uuid.EntityUuid)) or "TemplateError",
             tags = item.Tag.Tags or {},
             statsId = item.Data.StatsId or "StatsIdError",
-            amount = Osi.GetStackAmount(item.Uuid and item.Uuid.EntityUuid) or 0
+            amount = Osi.GetStackAmount(item.Uuid and item.Uuid.EntityUuid) or 0,
+            entity=item
         }
         local uuid = item.Uuid and item.Uuid.EntityUuid or nil
 
@@ -50,7 +51,8 @@ function DeepIterateInventory(entity, tagFilter, templateFilter, processedInvent
                     template = stackElement.ServerItem.Template.Id or "TemplateError",
                     tags = stackElement.Tag.Tags or {},
                     statsId = stackElement.Data.StatsId or "StatsIdError",
-                    amount = Osi.GetStackAmount(stackElement.Uuid.EntityUuid) or "AmountError"
+                    amount = Osi.GetStackAmount(stackElement.Uuid.EntityUuid) or 0,
+                    entity=stackElement
                 }
                 local stackUuid = stackElement.Uuid and stackElement.Uuid.EntityUuid
 
