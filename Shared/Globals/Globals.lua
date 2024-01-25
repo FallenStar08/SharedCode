@@ -30,7 +30,7 @@ ORIGINS = {
     ["Jaheira"] = "S_Player_Jaheira_91b6b200-7d00-4d62-8dc9-99e8339dfa1a",
     ["Minsc"] = "S_Player_Minsc_0de603c5-42e2-4811-9dad-f652de080eba",
     ["Karlach"] = "S_Player_Karlach_2c76687d-93a2-477b-8b18-8a14b549304c",
-    ["Minty"] = "Elves_Female_Drow_Lolth_Player_9d85d0f6-5231-4738-a674-bf28ff19e515",
+    ["Minty"] = "S_GOB_DrowCommander_25721313-0c15-4935-8176-9f134385451b",
     ["BearDude"] = "S_GLO_Halsin_7628bc0e-52b8-42a7-856a-13a6fd413323",
 }
 --Holds current party
