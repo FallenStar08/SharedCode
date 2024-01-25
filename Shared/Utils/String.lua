@@ -42,3 +42,11 @@ end
 function GUID(str)
     return string.sub(str, -36)
 end
+
+---Check if string contains a substring
+---@param str string the string to check
+---@param substr string the substring
+---@return boolean
+function StringContains(str, substr)
+    return string.find(str, substr, 1, true) ~= nil
+end
