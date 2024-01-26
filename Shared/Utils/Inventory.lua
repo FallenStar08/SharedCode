@@ -74,13 +74,14 @@ function FilterByTemplate(filter, filterMode)
 end
 
 --- Recursively iterates through an entity's inventory and all sub-inventories, building a table containing all items.
----@param entity any The entity whose inventory to iterate
+---@param entity Entity The entity whose inventory to iterate
 ---@param processedInventory? table Table to accumulate results
 ---@param filterFuncs? DeepIterateFilter[] the filtering function
 ---@return DeepIterateOutput processedInventory Table containing all items in entity's inventory tree table format:
 function DeepIterateInventory(entity, filterFuncs, processedInventory)
     processedInventory = processedInventory or {}
     local entityInventory = entity.InventoryOwner.PrimaryInventory
+---@diagnostic disable-next-line: undefined-field
     local entityItemsList = entityInventory.InventoryContainer.Items
     for _, entry in pairs(entityItemsList) do
         local item = entry.Item
