@@ -85,3 +85,20 @@ function JaroWinkler(str1, str2)
 
     return jaroWinkler
 end
+
+
+
+--- Converts RGB values to a hexadecimal color representation.
+--- @param r (number) The red component of the color (0 to 255).
+--- @param g (number) The green component of the color (0 to 255).
+--- @param b (number) The blue component of the color (0 to 255).
+--- @return (string) hex  the hexadecimal representation of the color in the format "#RRGGBB".
+    function RgbToHex(r, g, b)
+        -- Ensure RGB values are within valid range
+        r = math.max(0, math.min(255, r))
+        g = math.max(0, math.min(255, g))
+        b = math.max(0, math.min(255, b))
+    
+        -- Convert each component to hexadecimal and concatenate
+        return string.format("#%02X%02X%02X", r, g, b)
+    end
