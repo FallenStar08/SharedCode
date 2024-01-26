@@ -4,14 +4,23 @@
 --                                  INVENTORY                                 --
 -- -------------------------------------------------------------------------- --
 
+---@alias DeepIterateOutput {[Guid] : DeepIterateElement}
+
+---@class DeepIterateElement
+---@field entity ItemEntity
+---@field template ROOT
+---@field name string
+---@field statsId string
+---@field tags string[]
+---@field amount integer
+
 
 --- Recursively iterates through an entity's inventory and all sub-inventories, building a table containing all items.
 ---@param entity any The entity whose inventory to iterate
 ---@param processedInventory? table Table to accumulate results
 ---@param tagFilter? table The table of tags to filter items (optional)
 ---@param templateFilter? table The table of templates to filter items (optional)
----@return table processedInventory Table containing all items in entity's inventory tree table format:
----["uuid"]={amount(int), statsId(str), tags(table), template(str)}
+---@return DeepIterateOutput processedInventory Table containing all items in entity's inventory tree table format:
 function DeepIterateInventory(entity, tagFilter, templateFilter, processedInventory)
     tagFilter = tagFilter or nil
     templateFilter = templateFilter or nil
@@ -24,11 +33,12 @@ function DeepIterateInventory(entity, tagFilter, templateFilter, processedInvent
         local isContainer = item.InventoryOwner ~= nil
         local StackMember = item.InventoryStackMember
         local data = {
+            name = GetTranslatedString(item.DisplayName.NameKey.Handle.Handle),
             template = GUID(Osi.GetTemplate(item.Uuid and item.Uuid.EntityUuid)) or "TemplateError",
             tags = item.Tag.Tags or {},
             statsId = item.Data.StatsId or "StatsIdError",
             amount = Osi.GetStackAmount(item.Uuid and item.Uuid.EntityUuid) or 0,
-            entity=item
+            entity = item
         }
         local uuid = item.Uuid and item.Uuid.EntityUuid or nil
 
@@ -48,11 +58,12 @@ function DeepIterateInventory(entity, tagFilter, templateFilter, processedInvent
             local itemStack = StackMember.Stack.InventoryStack.Arr_u64
             for _, stackElement in pairs(itemStack) do
                 local stackData = {
+                    name = GetTranslatedString(stackElement.DisplayName.NameKey.Handle.Handle),
                     template = stackElement.ServerItem.Template.Id or "TemplateError",
                     tags = stackElement.Tag.Tags or {},
                     statsId = stackElement.Data.StatsId or "StatsIdError",
                     amount = Osi.GetStackAmount(stackElement.Uuid.EntityUuid) or 0,
-                    entity=stackElement
+                    entity = stackElement
                 }
                 local stackUuid = stackElement.Uuid and stackElement.Uuid.EntityUuid
 
@@ -91,12 +102,9 @@ end
 ---@param root ROOT
 ---@return boolean
 function HasItemTemplate(character, root)
-    if Osi.TemplateIsInInventory(root, character) >= 1 then
-        return true
-    else
-        return false
-    end
+    return Osi.TemplateIsInInventory(root, character) >= 1
 end
+
 ---Give Item to each party member if they don't have it already
 ---@param itemTemplate ROOT
 ---@return boolean result true if an item was given
