@@ -1,9 +1,15 @@
 -- -------------------------------------------------------------------------- --
 --                               Entities stuff                               --
 -- -------------------------------------------------------------------------- --
+---comment
+---@param entity Entity
+---@return Guid|nil
 function EntityToUuid(entity)
     return Ext.Entity.HandleToUuid(entity)
 end
+---comment
+---@param uuid Guid
+---@return Entity
 function _GE(uuid)
     return Ext.Entity.Get(uuid)
 end
