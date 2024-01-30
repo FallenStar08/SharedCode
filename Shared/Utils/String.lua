@@ -40,7 +40,11 @@ end
 ---@param str string input string from which to extract the GUID.
 ---@return GUIDSTRING UUIDsuffix with prefix removed.
 function GUID(str)
-    return string.sub(str, -36)
+    if str then
+        return string.sub(str, -36)
+    else
+        return NULLUUID
+    end
 end
 
 ---Check if string contains a substring
@@ -49,4 +53,15 @@ end
 ---@return boolean
 function StringContains(str, substr)
     return string.find(str, substr, 1, true) ~= nil
+end
+
+function RemoveTextBefore(input, text)
+    if input then
+        local index = string.find(input, text)
+        if index then
+            return string.sub(input, index)
+        else
+            return nil
+        end
+    end
 end
