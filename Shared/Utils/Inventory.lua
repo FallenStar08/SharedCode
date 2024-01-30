@@ -23,14 +23,15 @@
 ---@return DeepIterateElement
 local function formatInventoryObjectData(itemEntity)
     local uuid = itemEntity.Uuid and itemEntity.Uuid.EntityUuid
-    return {
-        name = GetTranslatedString(itemEntity.DisplayName.NameKey.Handle.Handle),
+    local data={
+        name = GetTranslatedString(SafeGetField(itemEntity,"DisplayName.NameKey.Handle.Handle")),
         template = GUID(Osi.GetTemplate(uuid)) or "TemplateError",
-        tags = itemEntity.Tag.Tags or {},
-        statsId = itemEntity.Data.StatsId or "StatsIdError",
+        tags = SafeGetField(itemEntity,"Tag.Tags") or {},
+        statsId = SafeGetField(itemEntity,"Data.StatsId") or "StatsIdError",
         amount = Osi.GetStackAmount(uuid) or 0,
         entity = itemEntity
     }
+    return data
 end
 
 ---Filter by tag for deepiterate
