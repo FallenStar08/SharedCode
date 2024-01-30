@@ -33,8 +33,38 @@ function UpdateTranslatedString(handle, content)
 end
 
 ---Retrieves the content of a translated string identified by the given handle.
----@param handle string The handle of the translated string to be retrieved.
----@return string content The content of the translated string.
+---@param handle? string The handle of the translated string to be retrieved.
+---@return string|nil content The content of the translated string.
 function GetTranslatedString(handle)
-    return Ext.Loca.GetTranslatedString(handle)
+    if handle then
+        return Ext.Loca.GetTranslatedString(handle)
+    end
+end
+
+-- Function to access nested fields in a table with pcall
+function SafeGetField(table, path)
+    local value = table
+    local fields = {}
+
+    -- Extract fields from path using gmatch
+    for match in path:gmatch("[^%.]+") do
+        fields[#fields + 1] = match
+    end
+
+    -- Traverse fields
+    for _, field in ipairs(fields) do
+        local success, result = pcall(function() return value[field] end)
+        if success and result ~= nil then
+            value = result
+        else
+            return nil
+        end
+    end
+
+    return value
+end
+
+function GrabHandle(data, fieldName)
+    local success, result = pcall(function() return GetTranslatedString(data[fieldName].Handle.Handle) end)
+    return success and result or nil
 end
