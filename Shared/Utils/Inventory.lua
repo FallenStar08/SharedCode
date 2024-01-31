@@ -23,6 +23,7 @@
 ---@return DeepIterateElement
 local function formatInventoryObjectData(itemEntity)
     local uuid = itemEntity.Uuid and itemEntity.Uuid.EntityUuid
+    if not uuid then uuid = NULLUUID end
     local data={
         name = GetTranslatedString(SafeGetField(itemEntity,"DisplayName.NameKey.Handle.Handle")),
         template = GUID(Osi.GetTemplate(uuid)) or "TemplateError",
@@ -135,3 +136,5 @@ function GiveItemToEachPartyMember(itemTemplate)
     end
     return hasGivenItem
 end
+
+
