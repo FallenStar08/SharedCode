@@ -14,9 +14,9 @@ function GetTranslatedName(UUID)
     local success, translatedName = pcall(function()
         return GetTranslatedString(Osi.GetDisplayName(UUID))
     end)
-
+    
     -- Handle errors by logging a basic debug message and returning a default "No name" string.
-    if success then
+    if success and translatedName then
         return translatedName
     else
         --Not really an error...
@@ -24,6 +24,7 @@ function GetTranslatedName(UUID)
         return "No name"
     end
 end
+
 
 ---Updates the content of a translated string identified by the given handle.
 ---@param handle string The handle of the translated string to be updated.
