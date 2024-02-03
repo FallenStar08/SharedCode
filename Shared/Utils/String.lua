@@ -50,7 +50,7 @@ end
 ---Check if string contains a substring
 ---@param str string the string to check
 ---@param substr string the substring
----@param caseSensitive boolean 
+---@param caseSensitive? boolean 
 ---@return boolean
 function StringContains(str, substr,caseSensitive)
     caseSensitive=caseSensitive or false
