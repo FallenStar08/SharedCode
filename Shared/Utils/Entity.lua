@@ -2,7 +2,7 @@
 --                               Entities stuff                               --
 -- -------------------------------------------------------------------------- --
 ---comment
----@param entity Entity
+---@param entity ItemEntity|CharacterEntity
 ---@return Guid|nil
 function EntityToUuid(entity)
     return Ext.Entity.HandleToUuid(entity)
