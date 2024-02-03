@@ -87,4 +87,9 @@ FALLEN_TAGS = {
     ["FALLEN_WEAPON"] = "5ebf8be6-76f9-4b49-a016-a00a03feab58",
     ["FALLEN_VANITY"] = "54e0d178-c5cb-4007-9434-3478ecfb6e1c",
     ["FALLEN_JEWELRY"] = "9ee9383a-5ab2-459f-9ef0-4bcb4c65e3e7",
+    ["FALLEN_CLOAK"]= "852e89c3-d861-4ffa-bebc-973e47486918" ,
+    ["FALLEN_RANGED"] = "d5843205-c6cd-41e9-9546-9ddb4024116e" ,
+    ["FALLEN_BARREL"] = "b888cfbf-8f60-4691-a119-f71011a85252",
+    ["FALLEN_QUEST"] = "f801d9c6-0050-4f31-bfdc-4684f606012b",
+    ["FALLEN_INSTRUMENT"] = "ed6c96cc-0c33-4f06-8d38-1a458bdc01a2",
 }
