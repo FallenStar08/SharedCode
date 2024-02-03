@@ -47,22 +47,20 @@ function GUID(str)
     end
 end
 
---- Check if string contains a substring
----@param str string The string to check
----@param substr string The substring
----@param caseSensitive? boolean Optional. Indicates whether the search should be case sensitive (default is false)
+---Check if string contains a substring
+---@param str string the string to check
+---@param substr string the substring
+---@param caseSensitive boolean 
 ---@return boolean
-function StringContains(str, substr, caseSensitive)
-    -- If caseSensitive is not provided, set it to false by default
+function StringContains(str, substr,caseSensitive)
     caseSensitive=caseSensitive or false
-    
-    -- Set the default flags for string.find
-    local flags = 1
-    if not caseSensitive then
-        flags = flags + 4  -- Set the "plain" flag for case-insensitive search
+    if caseSensitive then
+        return string.find(str, substr, 1, true) ~= nil
+    else
+        str=string.lower(str)
+        substr=string.lower(substr)
+        return string.find(str, substr, 1, true) ~= nil
     end
-    
-    return string.find(str, substr, 1, caseSensitive) ~= nil
 end
 
 function RemoveTextBefore(input, text)
