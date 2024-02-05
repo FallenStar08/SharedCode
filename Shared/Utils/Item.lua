@@ -16,13 +16,28 @@ end
 ---@param item GUIDSTRING|ItemEntity
 ---@return boolean
 function IsProbablyQuestItem(item)
-
-    if type(item=="string") then
+    if type(item) == "string" then
         ---@cast item string
-        return Osi.IsStoryItem(item) == 1 and StringContains(Osi.GetStatString(item), "quest") and StringContains(Template.GetTemplate(item).Name,"quest")
-    else
+        return Osi.IsStoryItem(item) == 1 and StringContains(Osi.GetStatString(item), "quest") and
+            StringContains(Template.GetTemplate(item).Name, "quest")
+    elseif type(item) == "userdata" then
         ---@cast item ItemEntity
         local uuid = EntityToUuid(item) or NULLUUID
-        return Osi.IsStoryItem(uuid) == 1 and StringContains(item.Data.StatsId, "quest") and StringContains(item.ServerItem.Template.Name,"quest")
+        return Osi.IsStoryItem(uuid) == 1 and StringContains(item.Data.StatsId, "quest") and
+            StringContains(item.ServerItem.Template.Name, "quest")
+    else
+        return false
+    end
+end
+
+---Mark an item as ware
+---@param item GUIDSTRING|ItemEntity
+function MarkAsWare(item)
+    if type(item) == "string" then
+        ---@cast item string
+        _GE(item).ServerItem.DontAddToHotbar = true
+    elseif type(item) == "userdata" then
+        ---@cast item ItemEntity
+        item.ServerItem.DontAddToHotbar = true
     end
 end
