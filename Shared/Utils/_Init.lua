@@ -15,5 +15,6 @@ RequireFiles("Shared/Utils/", {
     "Table",
     "Template",
     "Timer",
-    "Treasure"
+    "Treasure",
+    "ActionResource"
 })
