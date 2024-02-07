@@ -7,6 +7,7 @@
 function EntityToUuid(entity)
     return Ext.Entity.HandleToUuid(entity)
 end
+
 ---comment
 ---@param uuid Guid
 ---@return Entity
@@ -63,7 +64,6 @@ function CopyEntityData(TargetEntity, DonorEntity, copyList)
     end
 end
 
-
 ---Try to copy component data from donor to target using serialize
 ---@param target BaseComponent component that'll be overwritten
 ---@param donor BaseComponent component that'll give its juicy data
@@ -95,11 +95,16 @@ end
 function CopyStatuses(TargetEntity, DonorEntity)
     local targetUuid = EntityToUuid(TargetEntity)
     ClearAllStatuses(TargetEntity)
-    if targetUuid then
+    if targetUuid and DonorEntity and DonorEntity.ServerItem then
         for i = 1, #DonorEntity.ServerItem.StatusManager.Statuses do
             Osi.ApplyStatus(targetUuid, DonorEntity.ServerItem.StatusManager.Statuses[i].StatusId, -1)
         end
     else
-        BasicError("CopyStatuses() TargetEntity has no Uuid!")
+        BasicWarning("CopyStatuses() TargetEntity has no Uuid! Retrying...")
+        TEMPsubId = Ext.Entity.Subscribe("StatusContainer", function(entity,component,flag) 
+            CopyStatuses(TargetEntity, DonorEntity)
+        
+            Ext.Entity.Unsubscribe(TEMPsubId)
+        end,TargetEntity)
     end
 end
