@@ -48,4 +48,58 @@ function GetClosestEntitiesFromObjectByComponent(fromObject, component, minDista
     return results
 end
 
+---Copy data from donor entity to target entity
+---@param TargetEntity Entity the entity that'll receive data from the donor
+---@param DonorEntity Entity the donor entity that splurge his data onto the target
+---@param copyList table the list of components to copy from donor to target
+function CopyEntityData(TargetEntity, DonorEntity, copyList)
+    if TargetEntity and DonorEntity then
+        for _, entry in ipairs(copyList) do
+            CopyComponentData(TargetEntity[entry], DonorEntity[entry])
+            TargetEntity:Replicate(entry)
+        end
+    else
+        BasicError("CopyEntityData() Error here")
+    end
+end
 
+
+---Try to copy component data from donor to target using serialize
+---@param target BaseComponent component that'll be overwritten
+---@param donor BaseComponent component that'll give its juicy data
+function CopyComponentData(target, donor)
+    local success, errorOrSerialized = pcall(Ext.Types.Serialize, donor)
+    if success then
+        local success2, _ = pcall(Ext.Types.Unserialize, target, errorOrSerialized)
+        if not success2 then
+            --dontcare+yourecringe
+        end
+    else
+        --dontcare+yourecringe
+    end
+end
+
+---Nuke all statuses on an entity
+---@param Entity Entity
+function ClearAllStatuses(Entity)
+    if Entity and Entity.ServerItem and Entity.ServerItem.StatusManager then
+        for index, data in ipairs(Entity.ServerItem.StatusManager.Statuses) do
+            Entity.ServerItem.StatusManager.Statuses[index] = nil
+        end
+    end
+end
+
+---Copy statuses from one entity to another, clear statuses from target beforehand
+---@param TargetEntity Entity status will be applied to this entity
+---@param DonorEntity Entity statuses will come from this entity
+function CopyStatuses(TargetEntity, DonorEntity)
+    local targetUuid = EntityToUuid(TargetEntity)
+    ClearAllStatuses(TargetEntity)
+    if targetUuid then
+        for i = 1, #DonorEntity.ServerItem.StatusManager.Statuses do
+            Osi.ApplyStatus(targetUuid, DonorEntity.ServerItem.StatusManager.Statuses[i].StatusId, -1)
+        end
+    else
+        BasicError("CopyStatuses() TargetEntity has no Uuid!")
+    end
+end
