@@ -20,8 +20,7 @@ function GetTranslatedName(UUID)
         return translatedName
     else
         --Not really an error...
-        BasicDebug("Error in GetTranslatedName: " .. translatedName)
-        return "No name"
+        return "FALLEN_TRANSLATED_NAME_ERROR"
     end
 end
 
