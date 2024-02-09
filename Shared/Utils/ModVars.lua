@@ -20,8 +20,14 @@ end
 
 ---Sync things, for nerds.
 function SyncModVariables()
-    Ext.Vars.DirtyModVariables(MOD_INFO.MOD_UUID)
-    Ext.Vars.SyncModVariables(MOD_INFO.MOD_UUID)
+    local modVars=GetModVariables()
+    if modVars then
+        for varName,data in pairs(modVars) do
+            modVars[varName]= modVars[varName]
+        end
+        Ext.Vars.DirtyModVariables(MOD_INFO.MOD_UUID)
+        Ext.Vars.SyncModVariables(MOD_INFO.MOD_UUID)
+    end
 end
 
 -- -------------------------------------------------------------------------- --
