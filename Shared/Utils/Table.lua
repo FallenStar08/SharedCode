@@ -148,7 +148,7 @@ function Table.DeepCopy(orig)
             copy[Table.DeepCopy(orig_key)] = Table.DeepCopy(orig_value)
         end
         setmetatable(copy, Table.DeepCopy(getmetatable(orig)))
-    else -- number, string, boolean, etc
+    else
         copy = orig
     end
     return copy
