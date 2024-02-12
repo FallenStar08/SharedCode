@@ -14,16 +14,22 @@ function GetTranslatedName(UUID)
     local success, translatedName = pcall(function()
         return GetTranslatedString(Osi.GetDisplayName(UUID))
     end)
-    
-    -- Handle errors by logging a basic debug message and returning a default "No name" string.
-    if success and translatedName then
-        return translatedName
-    else
-        --Not really an error...
-        return "FALLEN_TRANSLATED_NAME_ERROR"
-    end
-end
 
+    -- Handle errors by trying to get the name from Ext.Template.GetTemplate(UUID).DisplayName.Handle.Handle
+    -- Hack for tmog cause I'm bad at programming
+    if not success or not translatedName then
+        success, translatedName = pcall(function()
+            local template = Template.GetTemplate(UUID)
+            ---@diagnostic disable-next-line: undefined-field
+            if template and template.DisplayName and template.DisplayName.Handle and template.DisplayName.Handle.Handle then
+                ---@diagnostic disable-next-line: undefined-field
+                return GetTranslatedString(template.DisplayName.Handle.Handle)
+            end
+        end)
+    end
+
+    return success and translatedName or "FALLEN_TRANSLATED_NAME_ERROR"
+end
 
 ---Updates the content of a translated string identified by the given handle.
 ---@param handle string The handle of the translated string to be updated.
