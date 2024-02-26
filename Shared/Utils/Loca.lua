@@ -74,3 +74,11 @@ function GrabHandle(data, fieldName)
     local success, result = pcall(function() return GetTranslatedString(data[fieldName].Handle.Handle) end)
     return success and result or nil
 end
+
+---Color a given string
+---@param string string string to colorize
+---@param color string hexadecimal color for html tag
+---@return string string colorized string
+function ColorTranslatedString(string, color)
+    return string.format("<font color='%s'>%s</font>", color, string)
+end

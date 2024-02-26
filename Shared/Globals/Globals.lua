@@ -84,6 +84,11 @@ BACKGROUND_COLORS = {
     white = 47,
 }
 
+FALLEN_BOOSTS = {
+    "Fallen_WeightlessItem",
+    "Fallen_HiddenItem"
+}
+
 FALLEN_TAGS = {
     ["FALLEN_ARMOR"] = "93d8c08c-9bf9-4049-b80e-9533ec9ff530",
     ["FALLEN_DYE"] = "fe0efdad-d6ee-4a8c-b4ae-a22a6c15bc25",
@@ -95,4 +100,5 @@ FALLEN_TAGS = {
     ["FALLEN_BARREL"] = "b888cfbf-8f60-4691-a119-f71011a85252",
     ["FALLEN_QUEST"] = "f801d9c6-0050-4f31-bfdc-4684f606012b",
     ["FALLEN_INSTRUMENT"] = "ed6c96cc-0c33-4f06-8d38-1a458bdc01a2",
+    ["FALLEN_MARK_FOR_DELETION"] = "150d0df5-bc92-408e-988d-fa1eb824c498",
 }

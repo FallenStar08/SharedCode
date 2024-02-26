@@ -139,6 +139,8 @@ function Table.ContainsAny(target, value)
     return false
 end
 
+
+
 function Table.DeepCopy(orig)
     local orig_type = type(orig)
     local copy
@@ -151,5 +153,6 @@ function Table.DeepCopy(orig)
     else
         copy = orig
     end
+
     return copy
 end
