@@ -50,7 +50,7 @@ function RefillActionResource(entity, resourceGuid, subResource)
     end
 end
 
----Recover max amount of resource X
+---Remove max amount of resource X
 ---@param entity Entity
 ---@param resourceGuid GUIDSTRING
 ---@param subResource? integer
