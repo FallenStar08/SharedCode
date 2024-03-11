@@ -122,19 +122,49 @@ function HasItemTemplate(character, root)
     return Osi.TemplateIsInInventory(root, character) >= 1
 end
 
----Give Item to each party member if they don't have it already
+
 ---@param itemTemplate ROOT
+---@param onetime? boolean
+---@param varToCheck? string
 ---@return boolean result true if an item was given
-function GiveItemToEachPartyMember(itemTemplate)
-    local hasGivenItem = false
-    GetSquadies()
-    for _, player in pairs(SQUADIES) do
-        if not HasItemTemplate(player, itemTemplate) then
-            Osi.TemplateAddTo(itemTemplate, player, 1, 1)
-            hasGivenItem = true
+function GiveItemToEachPartyMember(itemTemplate,onetime,varToCheck)
+    onetime=onetime or false
+    varToCheck = varToCheck or nil
+    if not onetime then
+        local hasGivenItem = false
+        GetSquadies()
+        for _, player in pairs(SQUADIES) do
+            if not HasItemTemplate(player, itemTemplate) then
+                Osi.TemplateAddTo(itemTemplate, player, 1, 1)
+                hasGivenItem = true
+            end
         end
+        return hasGivenItem
+    else
+        local modVars = GetModVariables()
+        local hasGivenItem = false
+        GetSquadies()
+        for _, player in pairs(SQUADIES) do
+            if varToCheck and not modVars[varToCheck] then
+                modVars[varToCheck] = {}
+            end
+            
+            if not modVars[varToCheck][player] then
+                modVars[varToCheck][player] = {}
+            end
+        
+            -- Now you can safely access modVars[varToCheck][player]
+            local playerModVar = modVars[varToCheck][player]
+            if not HasItemTemplate(player, itemTemplate) or playerModVar[itemTemplate] then
+                Osi.TemplateAddTo(itemTemplate, player, 1, 1)
+                modVars[varToCheck][player][itemTemplate]=true
+                BasicDebug("Doot")
+                hasGivenItem = true
+            end
+        end
+        SyncModVariables()
+        return hasGivenItem
     end
-    return hasGivenItem
 end
 
 
