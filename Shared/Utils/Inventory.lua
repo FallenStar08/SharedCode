@@ -155,7 +155,7 @@ function GiveItemToEachPartyMember(itemTemplate,onetime,varToCheck)
         
             -- Now you can safely access modVars[varToCheck][player]
             local playerModVar = modVars[varToCheck][player]
-            if not HasItemTemplate(player, itemTemplate) or playerModVar[itemTemplate] then
+            if not HasItemTemplate(player, itemTemplate) or not playerModVar[itemTemplate] then
                 Osi.TemplateAddTo(itemTemplate, player, 1, 1)
                 modVars[varToCheck][player][itemTemplate]=true
                 BasicDebug("Doot")

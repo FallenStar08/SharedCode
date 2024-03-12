@@ -18,8 +18,10 @@ ModInfo = {}
 ---@param modName string The name of the mod.
 ---@param requireConfig? boolean Whether the mod requires a configuration.
 ---@param defaultModConfigTable? table The default configuration table for the mod
+---@param userVars? table userVars to register
+---@param modVars? table modVars to register
 ---@return ModInfo instance an instance of the ModInfo class.
-function ModInfo:new(folderName, modName, requireConfig, defaultModConfigTable)
+function ModInfo:new(folderName, modName, requireConfig, defaultModConfigTable, userVars, modVars)
     local instance = {
         FOLDER_NAME = folderName,
         MOD_NAME = modName,
@@ -30,7 +32,7 @@ function ModInfo:new(folderName, modName, requireConfig, defaultModConfigTable)
             Ext.Mod.GetMod(ModuleUUID).Info.ModVersion[1],
             Ext.Mod.GetMod(ModuleUUID).Info.ModVersion[2],
             Ext.Mod.GetMod(ModuleUUID).Info.ModVersion[3],
-            Ext.Mod.GetMod(ModuleUUID).Info.ModVersion[4])
+            Ext.Mod.GetMod(ModuleUUID).Info.ModVersion[4]),
     }
     setmetatable(instance, self)
     self.__index = self
