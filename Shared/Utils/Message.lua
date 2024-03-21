@@ -115,3 +115,19 @@ function GetRainbowText(text)
     end
     return coloredText
 end
+
+---BasicPrint but supports string.format syntax
+---@param content any
+---@param ... any
+function Fprint(content, ...)
+    content = string.format(content, ...)
+    BasicPrint(content)
+end
+
+---BasicDebug but supports string.format syntax
+---@param content any
+---@param ... any
+function DFprint(content, ...)
+    content = string.format(content, ...)
+    BasicDebug(content)
+end
