@@ -24,11 +24,11 @@
 local function formatInventoryObjectData(itemEntity)
     local uuid = itemEntity.Uuid and itemEntity.Uuid.EntityUuid
     if not uuid then uuid = NULLUUID end
-    local data={
-        name = GetTranslatedString(SafeGetField(itemEntity,"DisplayName.NameKey.Handle.Handle")),
+    local data = {
+        name = GetTranslatedString(SafeGetField(itemEntity, "DisplayName.NameKey.Handle.Handle")),
         template = GUID(Osi.GetTemplate(uuid)) or "TemplateError",
-        tags = SafeGetField(itemEntity,"Tag.Tags") or {},
-        statsId = SafeGetField(itemEntity,"Data.StatsId") or "StatsIdError",
+        tags = SafeGetField(itemEntity, "Tag.Tags") or {},
+        statsId = SafeGetField(itemEntity, "Data.StatsId") or "StatsIdError",
         amount = Osi.GetStackAmount(uuid) or 0,
         entity = itemEntity
     }
@@ -83,7 +83,7 @@ end
 function DeepIterateInventory(entity, filterFuncs, processedInventory)
     processedInventory = processedInventory or {}
     local entityInventory = entity.InventoryOwner.PrimaryInventory
----@diagnostic disable-next-line: undefined-field
+    ---@diagnostic disable-next-line: undefined-field
     local entityItemsList = entityInventory.InventoryContainer.Items
     for _, entry in pairs(entityItemsList) do
         local item = entry.Item
@@ -122,13 +122,12 @@ function HasItemTemplate(character, root)
     return Osi.TemplateIsInInventory(root, character) >= 1
 end
 
-
----@param itemTemplate ROOT
----@param onetime? boolean
----@param varToCheck? string
+---@param itemTemplate ROOT item to give
+---@param onetime? boolean if true will save the given state to the varToCheck var
+---@param varToCheck? string var to save if item was already given
 ---@return boolean result true if an item was given
-function GiveItemToEachPartyMember(itemTemplate,onetime,varToCheck)
-    onetime=onetime or false
+function GiveItemToEachPartyMember(itemTemplate, onetime, varToCheck)
+    onetime = onetime or false
     varToCheck = varToCheck or nil
     if not onetime then
         local hasGivenItem = false
@@ -148,16 +147,16 @@ function GiveItemToEachPartyMember(itemTemplate,onetime,varToCheck)
             if varToCheck and not modVars[varToCheck] then
                 modVars[varToCheck] = {}
             end
-            
+
             if not modVars[varToCheck][player] then
                 modVars[varToCheck][player] = {}
             end
-        
+
             -- Now you can safely access modVars[varToCheck][player]
             local playerModVar = modVars[varToCheck][player]
             if not HasItemTemplate(player, itemTemplate) and not playerModVar[itemTemplate] then
                 Osi.TemplateAddTo(itemTemplate, player, 1, 1)
-                modVars[varToCheck][player][itemTemplate]=true
+                modVars[varToCheck][player][itemTemplate] = true
                 BasicDebug("Doot")
                 hasGivenItem = true
             end
@@ -166,5 +165,3 @@ function GiveItemToEachPartyMember(itemTemplate,onetime,varToCheck)
         return hasGivenItem
     end
 end
-
-

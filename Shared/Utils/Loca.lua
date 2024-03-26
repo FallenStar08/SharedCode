@@ -47,6 +47,7 @@ function GetTranslatedString(handle)
     end
 end
 
+--TODO move this somewhere else
 -- Function to access nested fields in a table with pcall
 function SafeGetField(table, path)
     local value = table

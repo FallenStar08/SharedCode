@@ -16,3 +16,14 @@ if Ext.IsServer() then
     Template.GetRootTemplate = Ext.Template.GetRootTemplate
     Template.GetTemplate = Ext.Template.GetTemplate
 end
+
+---Try its best to get the RT of something
+---@param item GUIDSTRING?
+---@return GameObjectTemplate?
+function GetRootTemplateData(item)
+    if item then
+        return Template.GetRootTemplate(GUID(Osi.GetTemplate(item)))
+    else
+        DFprint("Couldn't get RT for item %s", item)
+    end
+end
