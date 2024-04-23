@@ -63,8 +63,8 @@ function GetEnemiesInCombatGuid(guid)
     local combat = Osi.DB_Is_InCombat:Get(nil, guid)
     local enemies = {}
     for _, enemy in pairs(combat) do
-        if Osi.IsPartyMember(enemy[1], 1)==0 then
-        table.insert(enemies, GUID(enemy[1]))
+        if Osi.IsPartyMember(enemy[1], 1) == 0 then
+            table.insert(enemies, GUID(enemy[1]))
         end
     end
     if not next(enemies) then return nil end
@@ -75,21 +75,21 @@ function GetAvatars()
     local avatarsDB = Osi.DB_Avatars:Get(nil)
     local avatars = {}
     for _, avatar in pairs(avatarsDB) do
-        table.insert(avatars,GUID(avatar[1]))
+        table.insert(avatars, GUID(avatar[1]))
     end
     return avatars
 end
 
 --Returns all avatars and Origins
 function GetEveryoneThatIsRelevant()
-    local goodies={}
+    local goodies = {}
     local avatarsDB = Osi.DB_Avatars:Get(nil)
     local originsDB = Osi.DB_Origins:Get(nil)
-    for _,avatar in pairs(avatarsDB) do
-        goodies[#goodies+1] = avatar[1]
+    for _, avatar in pairs(avatarsDB) do
+        goodies[#goodies + 1] = avatar[1]
     end
-    for _,origin in pairs(originsDB) do
-        goodies[#goodies+1] = origin[1]
+    for _, origin in pairs(originsDB) do
+        goodies[#goodies + 1] = origin[1]
     end
     return goodies
 end
