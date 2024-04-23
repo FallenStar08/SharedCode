@@ -10,9 +10,13 @@ end
 
 ---comment
 ---@param uuid Guid
----@return Entity
+---@return Entity?
 function _GE(uuid)
-    return Ext.Entity.Get(uuid)
+    if uuid then
+        return Ext.Entity.Get(uuid)
+    else
+        return nil
+    end
 end
 
 --- Retrieves entities uuid with a specified component within a given distance from a reference object.
@@ -101,10 +105,10 @@ function CopyStatuses(TargetEntity, DonorEntity)
         end
     else
         BasicWarning("CopyStatuses() TargetEntity has no Uuid! Retrying...")
-        TEMPsubId = Ext.Entity.Subscribe("StatusContainer", function(entity,component,flag) 
+        TEMPsubId = Ext.Entity.Subscribe("StatusContainer", function(entity, component, flag)
             CopyStatuses(TargetEntity, DonorEntity)
-        
+
             Ext.Entity.Unsubscribe(TEMPsubId)
-        end,TargetEntity)
+        end, TargetEntity)
     end
 end
