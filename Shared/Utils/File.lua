@@ -29,12 +29,11 @@ function Files.Path(filePath)
 end
 
 --- Parses a JSON string into a Lua table.
----@param json_str string The JSON string to parse.
+---@param json_str string|table The JSON string to parse.
 ---@return table
 function JSON.Parse(json_str)
     return Ext.Json.Parse(json_str)
 end
-
 
 --- Stringifies the given Lua data structure into a JSON string.
 ---@param data any The data to stringify
