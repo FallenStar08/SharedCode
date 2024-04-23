@@ -75,15 +75,16 @@ function FilterByTemplate(filter, filterMode)
     end
 end
 
+--Todo add shallow iterate if needed
 --- Recursively iterates through an entity's inventory and all sub-inventories, building a table containing all items.
----@param entity Entity The entity whose inventory to iterate
+---@param entity? Entity The entity whose inventory to iterate
 ---@param processedInventory? table Table to accumulate results
----@param filterFuncs? DeepIterateFilter[] the filtering function
----@return DeepIterateOutput processedInventory Table containing all items in entity's inventory tree table format:
+---@param filterFuncs? DeepIterateFilter[] the filtering functions
+---@return DeepIterateOutput? processedInventory Result table filtered or not
 function DeepIterateInventory(entity, filterFuncs, processedInventory)
+    if not entity then return end
     processedInventory = processedInventory or {}
     local entityInventory = entity.InventoryOwner.PrimaryInventory
-    ---@diagnostic disable-next-line: undefined-field
     local entityItemsList = entityInventory.InventoryContainer.Items
     for _, entry in pairs(entityItemsList) do
         local item = entry.Item
@@ -91,13 +92,15 @@ function DeepIterateInventory(entity, filterFuncs, processedInventory)
         local StackMember = item.InventoryStackMember
         local data = formatInventoryObjectData(item)
         local uuid = item.Uuid and item.Uuid.EntityUuid or nil
+
         if filterFuncs then
             for _, func in ipairs(filterFuncs) do
                 data = func(data)
             end
         end
+
         if StackMember and data then
-            local itemStack = StackMember.Stack.InventoryStack.Arr_u64
+            local itemStack = StackMember.Stack.InventoryStack.Elements
             for _, stackElement in pairs(itemStack) do
                 local stackData = formatInventoryObjectData(stackElement)
                 local stackUuid = stackElement.Uuid and stackElement.Uuid.EntityUuid
