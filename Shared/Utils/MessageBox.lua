@@ -12,6 +12,6 @@ function FallenMessageBox(eventId, content, initiation, char1, char2, char3, for
     char1 = char1 or ""
     char2 = char2 or ""
     char3 = char3 or ""
-    _G.INITIATIOR = initiation
+    _G.INITIATOR = initiation
     Osi.ReadyCheckSpecific(eventId, content, force, initiation, char1, char2, char3)
 end
