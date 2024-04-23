@@ -100,7 +100,7 @@ function DeepIterateInventory(entity, filterFuncs, processedInventory)
         end
 
         if StackMember and data then
-            local itemStack = StackMember.Stack.InventoryStack.Elements
+            local itemStack = StackMember.Stack.InventoryStack.Arr_u64
             for _, stackElement in pairs(itemStack) do
                 local stackData = formatInventoryObjectData(stackElement)
                 local stackUuid = stackElement.Uuid and stackElement.Uuid.EntityUuid
