@@ -52,14 +52,19 @@ end
 ---@param rainbowText? boolean If true, the text will be displayed in rainbow colors. Defaults to false.
 ---@param prefixLength? number The length of the prefix. Defaults to 15 if not provided.
 function BasicPrint(content, messageType, textColor, customPrefix, rainbowText, prefixLength)
+    --local logLevel = (CONFIG and CONFIG.DEBUG_MESSAGES) or 3
     local logLevel = (CONFIG and CONFIG.DEBUG_MESSAGES) or 3
+    if Mods.BG3MCM and Mods.BG3MCM.MCMAPI and Mods.BG3MCM.MCMAPI:GetSettingValue('debug_level', ModuleUUID) then
+        logLevel = Mods.BG3MCM.MCMAPI:GetSettingValue('debug_level', ModuleUUID)
+    end
+
     prefixLength = prefixLength or 15
     messageType = messageType or "INFO"
     local textColorCode = textColor or TEXT_COLORS.blue -- Default to blue
     customPrefix = customPrefix or (MOD_INFO and MOD_INFO.MOD_NAME) or "FALLEN_DEFAULT"
-    if CONFIG and CONFIG.LOG_ENABLED == 1 then
-        Files.LogMessage(ConcatOutput(ConcatPrefix(customPrefix .. "  [" .. messageType .. "]", content)))
-    end
+    -- if CONFIG and CONFIG.LOG_ENABLED == 1 then
+    --     Files.LogMessage(ConcatOutput(ConcatPrefix(customPrefix .. "  [" .. messageType .. "]", content)))
+    -- end
 
     if logLevel <= 0 then
         return
@@ -118,36 +123,6 @@ function GetRainbowText(text)
     end
 
     return coloredText
-end
-
----@param h integer hue
----@param s integer saturation
----@param v integer value
----@return integer r red
----@return integer g green
----@return integer b blue
-function HSVToRGB(h, s, v)
-    local c = v * s
-    local hp = h / 60
-    local x = c * (1 - math.abs(hp % 2 - 1))
-    local r, g, b = 0, 0, 0
-
-    if hp >= 0 and hp <= 1 then
-        r, g, b = c, x, 0
-    elseif hp >= 1 and hp <= 2 then
-        r, g, b = x, c, 0
-    elseif hp >= 2 and hp <= 3 then
-        r, g, b = 0, c, x
-    elseif hp >= 3 and hp <= 4 then
-        r, g, b = 0, x, c
-    elseif hp >= 4 and hp <= 5 then
-        r, g, b = x, 0, c
-    elseif hp >= 5 and hp <= 6 then
-        r, g, b = c, 0, x
-    end
-
-    local m = v - c
-    return math.floor((r + m) * 255), math.floor((g + m) * 255), math.floor((b + m) * 255)
 end
 
 ---BasicPrint but supports string.format syntax
