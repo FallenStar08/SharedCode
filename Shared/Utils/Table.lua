@@ -83,16 +83,7 @@ function Table.IsValidSet(set)
 end
 
 --Todo move to autosell
-function Table.ProcessTables(baseTable, keeplistTable, selllistTable)
-    -- User Lists only, clear baseTable
-    if CONFIG["CUSTOM_LISTS_ONLY"] >= 1 then baseTable = {} end
 
-    --Merge sell entries to the base list
-    for name, uid in pairs(selllistTable) do baseTable[name] = uid end
-    --Merge keep entries to the base list
-    for name, uid in pairs(keeplistTable) do baseTable[name] = nil end
-    return baseTable
-end
 
 function Table.FindKeyInSet(set, key)
     return set[key] ~= nil
