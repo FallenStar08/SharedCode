@@ -1,35 +1,38 @@
 Net = {}
 
 if Ext.IsClient() then
-    ---Send message to server
+    ---Send payload to server
     ---@param channel string
-    ---@param message string
-    function Net.Send(channel, message)
-        Ext.ClientNet.PostMessageToServer(channel, message)
+    ---@param payload string
+    function Net.Send(channel, payload)
+        Ext.ClientNet.PostMessageToServer(channel, payload)
     end
 
-    ---Listen for message from server on a specific channel and run function
+    ---Listen for payload from server on a specific channel and run function
     ---@param channel string
-    ---@param func function
+    ---@param func fun(payload:string,user:integer?)
     function Net.ListenFor(channel, func)
-        Ext.RegisterNetListener(channel, func)
+        Ext.RegisterNetListener(channel, function(channel, payload, user)
+            func(payload, user)
+        end)
     end
 end
 
 
-
 if Ext.IsServer() then
-    ---Send message to all clients
+    ---Send payload to all clients
     ---@param channel string
-    ---@param message string
-    function Net.Send(channel, message)
-        Ext.ServerNet.BroadcastMessage(channel, message)
+    ---@param payload string
+    function Net.Send(channel, payload)
+        Ext.ServerNet.BroadcastMessage(channel, payload)
     end
 
-    ---Listen for message from client on a specific channel and run function
+    ---Listen for payload from client on a specific channel and run function
     ---@param channel string
-    ---@param func function
+    ---@param func fun(payload:string,user:integer?)
     function Net.ListenFor(channel, func)
-        Ext.RegisterNetListener(channel, func)
+        Ext.RegisterNetListener(channel, function(channel, payload, user)
+            func(payload, user)
+        end)
     end
 end

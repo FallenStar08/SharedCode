@@ -29,8 +29,6 @@ function Table.CheckIfAllValuesExist(tbl, valueList)
     return true
 end
 
-
-
 ---Checks if a specific value exists in the given table.
 ---@param tbl table The table to search for the value.
 ---@param value any The value to check for existence in the table.
@@ -86,7 +84,10 @@ end
 
 
 function Table.FindKeyInSet(set, key)
-    return set[key] ~= nil
+    if set then
+        return set[key] ~= nil
+    end
+    return false
 end
 
 --- Merges two sets, throwing an error if a key already exists.
@@ -121,7 +122,7 @@ end
 ---@param value string The string to check for presence in the target table.
 ---@return boolean result true if the value is found in the target table, false otherwise.
 function Table.ContainsAny(target, value)
-    if not(target and value) then return false end
+    if not (target and value) then return false end
     for _, templateUuid in ipairs(target) do
         if templateUuid == value then
             return true
@@ -129,8 +130,6 @@ function Table.ContainsAny(target, value)
     end
     return false
 end
-
-
 
 function Table.DeepCopy(orig)
     local orig_type = type(orig)

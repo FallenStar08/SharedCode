@@ -53,8 +53,10 @@ end
 ---@param prefixLength? number The length of the prefix. Defaults to 15 if not provided.
 function BasicPrint(content, messageType, textColor, customPrefix, rainbowText, prefixLength)
     --local logLevel = (CONFIG and CONFIG.DEBUG_MESSAGES) or 3
+
+    --Maybe don't get the log level on every message? idk
     local logLevel = (CONFIG and CONFIG.DEBUG_MESSAGES) or 3
-    if Mods.BG3MCM and Mods.BG3MCM.MCMAPI and Mods.BG3MCM.MCMAPI:GetSettingValue('debug_level', ModuleUUID) then
+    if Mods.BG3MCM and Mods.BG3MCM.MCMAPI and Mods.BG3MCM.MCMAPI.mods[MOD_INFO.MOD_UUID] and Mods.BG3MCM.MCMAPI:GetSettingValue('debug_level', ModuleUUID) then
         logLevel = Mods.BG3MCM.MCMAPI:GetSettingValue('debug_level', ModuleUUID)
     end
 
