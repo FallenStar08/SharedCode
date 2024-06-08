@@ -5,7 +5,11 @@ if Ext.IsClient() then
     ---@param channel string
     ---@param payload string
     function Net.Send(channel, payload)
-        Ext.ClientNet.PostMessageToServer(channel, payload)
+        if type(payload) == "string" then
+            Ext.ClientNet.PostMessageToServer(channel, payload)
+        elseif type(payload) == "table" then
+            Ext.ClientNet.PostMessageToServer(channel, JSON.Stringify(payload))
+        end
     end
 
     ---Listen for payload from server on a specific channel and run function
@@ -24,7 +28,11 @@ if Ext.IsServer() then
     ---@param channel string
     ---@param payload string
     function Net.Send(channel, payload)
-        Ext.ServerNet.BroadcastMessage(channel, payload)
+        if type(payload) == "string" then
+            Ext.ServerNet.BroadcastMessage(channel, payload)
+        elseif type(payload) == "table" then
+            Ext.ServerNet.BroadcastMessage(channel, JSON.Stringify(payload))
+        end
     end
 
     ---Listen for payload from client on a specific channel and run function
