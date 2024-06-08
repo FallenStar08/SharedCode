@@ -122,7 +122,7 @@ end
 ---@param root ROOT
 ---@return boolean
 function HasItemTemplate(character, root)
-    return Osi.TemplateIsInInventory(root, character) >= 1
+    return (Osi.TemplateIsInInventory(root, character) or 0) >= 1
 end
 
 ---@param itemTemplate ROOT item to give
@@ -155,7 +155,6 @@ function GiveItemToEachPartyMember(itemTemplate, onetime, varToCheck)
                 modVars[varToCheck][player] = {}
             end
 
-            -- Now you can safely access modVars[varToCheck][player]
             local playerModVar = modVars[varToCheck][player]
             if not HasItemTemplate(player, itemTemplate) and not playerModVar[itemTemplate] then
                 Osi.TemplateAddTo(itemTemplate, player, 1, 1)
