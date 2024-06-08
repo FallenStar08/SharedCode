@@ -26,7 +26,7 @@ end
 ---@param maxDistance? number The maximum distance within which entities should be considered. If nil, Defaults to 10
 ---@param minDistance? number The minimum distance within which entities should be considered. If nil, Defaults to 0
 ---@return table results A table containing information about entities within the specified distance and with the specified component.
---- Each entry in the table is a table with the following fields:
+--- Each entry in the table is a table with the following fields: --TODO make class for result table
 ---   - Name (string) The translated name of the entity.
 ---   - UUID (string) The UUID of the entity.
 ---   - distance (number) The distance from the reference object to the entity.
@@ -39,9 +39,10 @@ function GetClosestEntitiesFromObjectByComponent(fromObject, component, minDista
     local allEntities = Ext.Entity.GetAllEntitiesWithComponent(component)
     for i, v in ipairs(allEntities) do
         local isInInventory = false
-        local uuid = v.Uuid.EntityUuid
+        local uuid = EntityToUuid(v) or NULLUUID
         local distance = Osi.GetDistanceTo(fromObject, uuid)
         if not distance then
+            --Only if the fromObject was someone with an inventory actually, idk
             isInInventory = true
             distance = 0
         end
