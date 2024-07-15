@@ -18,6 +18,7 @@ RequireFiles("Shared/Utils/", {
     "Treasure",
     "ActionResource",
     "MessageBox",
-    "Net"
+    "Net",
+    "APIs"
     --"ClientUI"
 })

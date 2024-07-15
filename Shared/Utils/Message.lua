@@ -55,6 +55,9 @@ function BasicPrint(content, messageType, textColor, customPrefix, rainbowText, 
     --local logLevel = (CONFIG and CONFIG.DEBUG_MESSAGES) or 3
 
     --Maybe don't get the log level on every message? idk
+
+    --Retrocompat, just in case (✿◕‿◕✿)
+    ---@diagnostic disable-next-line: undefined-global
     local logLevel = (CONFIG and CONFIG.DEBUG_MESSAGES) or 3
     if Mods.BG3MCM and Mods.BG3MCM.MCMAPI and Mods.BG3MCM.MCMAPI.mods[MOD_INFO.MOD_UUID] and Mods.BG3MCM.MCMAPI:GetSettingValue('debug_level', ModuleUUID) then
         logLevel = Mods.BG3MCM.MCMAPI:GetSettingValue('debug_level', ModuleUUID)

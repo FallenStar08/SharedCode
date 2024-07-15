@@ -1,5 +1,7 @@
 Net = {}
 
+--TODO handle userdata, or don't, idk
+
 if Ext.IsClient() then
     ---Send payload to server
     ---@param channel string
