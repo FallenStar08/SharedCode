@@ -1,14 +1,14 @@
 -- -------------------------------------------------------------------------- --
 --                               Entities stuff                               --
 -- -------------------------------------------------------------------------- --
----comment
----@param entity ItemEntity|CharacterEntity
+---returns the entity's uuid
+---@param entity EntityHandle|Entity
 ---@return Guid|nil
 function EntityToUuid(entity)
     return Ext.Entity.HandleToUuid(entity)
 end
 
----comment
+---shortcut for Ext.Entity.Get(uuid)
 ---@param uuid Guid
 ---@return Entity?
 function _GE(uuid)
@@ -112,4 +112,31 @@ function CopyStatuses(TargetEntity, DonorEntity)
             Ext.Entity.Unsubscribe(TEMPsubId)
         end, TargetEntity)
     end
+end
+
+---Returns a list of statuses applied on the target entity
+---@param Entity Entity?
+---@return table<string,boolean>
+function GetAppliedStatus(Entity)
+    if not Entity then return {} end
+    local statuses = {}
+    local entitiesStatus = SafeGetField(Entity, "StatusContainer.Statuses")
+    if entitiesStatus then
+        for statusEntity, statusName in pairs(Entity.StatusContainer.Statuses) do
+            statuses[statusName] = true
+        end
+    end
+    return statuses
+end
+
+---Check if target entity is affected by a given status
+---@param Entity Entity
+---@param statusName string
+---@return boolean
+function HasStatus(Entity, statusName)
+    local statuses = GetAppliedStatus(Entity)
+    if statuses[statusName] then
+        return true
+    end
+    return false
 end
