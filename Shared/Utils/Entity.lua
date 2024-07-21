@@ -85,6 +85,7 @@ function CopyComponentData(target, donor)
 end
 
 ---Nuke all statuses on an entity
+--TODO fix this shit and make it work on characters
 ---@param Entity Entity
 function ClearAllStatuses(Entity)
     if Entity and Entity.ServerItem and Entity.ServerItem.StatusManager then
@@ -96,6 +97,7 @@ end
 
 ---Copy statuses from one entity to another, clear statuses from target beforehand
 ---@param TargetEntity Entity status will be applied to this entity
+--TODO fix this shit and make it work on characters
 ---@param DonorEntity Entity statuses will come from this entity
 function CopyStatuses(TargetEntity, DonorEntity)
     local targetUuid = EntityToUuid(TargetEntity)
