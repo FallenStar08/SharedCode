@@ -8,3 +8,11 @@ function GetMCMSettingValue(settingName)
 end
 
 GetMCM = GetMCMSettingValue
+
+---Return a table with all settings id : value pairs
+---@return table<string, any>
+function GetMCMSettingTable()
+    return Mods.BG3MCM.MCMAPI:GetAllModSettings(MOD_INFO.MOD_UUID)
+end
+
+GetMCMTable = GetMCMSettingTable
