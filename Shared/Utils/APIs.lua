@@ -9,6 +9,15 @@ end
 
 GetMCM = GetMCMSettingValue
 
+---Set value for setting from MCM
+---@param settingName string settingName to get the value of
+---@param value any the setting's new value
+function SetMCMSettingValue(settingName, value)
+    return Mods.BG3MCM.MCMAPI:SetSettingValue(settingName, value, MOD_INFO.MOD_UUID)
+end
+
+SetMCM = SetMCMSettingValue
+
 ---Return a table with all settings id : value pairs
 ---@return table<string, any>
 function GetMCMSettingTable()
