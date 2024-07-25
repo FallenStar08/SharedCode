@@ -62,54 +62,26 @@ function Table.CompareSets(set1, set2)
     end
 end
 
---Check filter lists
-function Table.IsValidSet(set)
-    local isValid = true
-    if not set then
-        isValid = false
-    else
-        for k, v in pairs(set) do
-            if type(k) ~= "string" or type(v) ~= "string" then
-                BasicWarning("IsValidSet() - Set isn't valid : ")
-                BasicWarning(set)
-                isValid = false
-                break
-            end
-        end
-    end
-    return isValid
-end
-
---Todo move to autosell
 
 
-function Table.FindKeyInSet(set, key)
-    if set then
-        return set[key] ~= nil
-    end
-    return false
-end
-
---- Merges two sets, throwing an error if a key already exists.
+--- Merges two sets
 ---@param set1 table The first set
 ---@param set2 table The second set
 ---@return table The merged set
 function Table.MergeSets(set1, set2)
     local mergedSet = {}
 
-    -- Merge set1 into mergedSet
     for key, value in pairs(set1) do
         if mergedSet[key] then
-            --BasicError("Key '" .. key .. "' already exists in the merged set.")
+            --Key already exists, dontcare+you'recringe
         else
             mergedSet[key] = value
         end
     end
 
-    -- Merge set2 into mergedSet
     for key, value in pairs(set2) do
         if mergedSet[key] then
-            --BasicError("Key '" .. key .. "' already exists in the merged set.")
+            --Key already exists, dontcare+you'recringe
         else
             mergedSet[key] = value
         end
@@ -117,9 +89,9 @@ function Table.MergeSets(set1, set2)
     return mergedSet
 end
 
---- Checks if a  string is present in the array of  UUIDs.
+--- Checks if a value is present in the target array
 ---@param target table The table containing strings to search.
----@param value string The string to check for presence in the target table.
+---@param value string|number The string/number to check for presence in the target table.
 ---@return boolean result true if the value is found in the target table, false otherwise.
 function Table.ContainsAny(target, value)
     if not (target and value) then return false end
@@ -131,6 +103,9 @@ function Table.ContainsAny(target, value)
     return false
 end
 
+---returns a new table that is a copy of the original
+---@param orig table
+---@return table
 function Table.DeepCopy(orig)
     local orig_type = type(orig)
     local copy
