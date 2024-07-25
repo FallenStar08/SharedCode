@@ -62,8 +62,6 @@ function Table.CompareSets(set1, set2)
     end
 end
 
-
-
 --- Merges two sets
 ---@param set1 table The first set
 ---@param set2 table The second set
@@ -120,4 +118,16 @@ function Table.DeepCopy(orig)
     end
 
     return copy
+end
+
+---map function since lua doesn't have it (cringe)
+---@param table table is a table, yes.
+---@param fun function function to apply to each element
+---@return table table the modified table
+function Table.Map(table, fun)
+    local t = {}
+    for k, v in pairs(table) do
+        t[k] = fun(v)
+    end
+    return t
 end
