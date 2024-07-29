@@ -4,9 +4,10 @@
 --                             Messages functions                             --
 -- -------------------------------------------------------------------------- --
 
----@alias MESSAGETYPE string | "INFO"|"WARNING"|"ERROR"|"DEBUG"
+---@alias MESSAGETYPE string |"NONE"|"INFO"|"WARNING"|"ERROR"|"DEBUG"
 
 local PrintTypes = {
+    NONE = 0,
     INFO = 1,
     ERROR = 2,
     WARNING = 3,
@@ -77,7 +78,12 @@ function BasicPrint(content, messageType, textColor, customPrefix, rainbowText, 
 
     if PrintTypes[messageType] and logLevel >= PrintTypes[messageType] then
         local padding = string.rep(" ", prefixLength - #customPrefix)
-        local message = ConcatOutput(ConcatPrefix(customPrefix .. padding .. "  [" .. messageType .. "]", content))
+        local message
+        if PrintTypes[messageType] == 0 then
+            message = ConcatOutput(content)
+        else
+            message = ConcatOutput(ConcatPrefix(customPrefix .. padding .. "  [" .. messageType .. "]", content))
+        end
         local coloredMessage = rainbowText and GetRainbowText(message) or
             string.format("\x1b[%dm%s\x1b[0m", textColorCode, message)
         if messageType == "ERROR" then

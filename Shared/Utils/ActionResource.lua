@@ -1,5 +1,5 @@
 ---Add X amount of resource Y
----@param entity Entity
+---@param entity EntityHandle
 ---@param resourceGuid GUIDSTRING
 ---@param amountToAdd integer
 ---@param subResource? integer
@@ -18,7 +18,7 @@ function AddActionResource(entity, resourceGuid, amountToAdd, subResource)
 end
 
 ---Remove X amount of resource Y
----@param entity Entity
+---@param entity EntityHandle
 ---@param resourceGuid GUIDSTRING
 ---@param amountToRemove integer
 ---@param subResource? integer
@@ -37,7 +37,7 @@ end
 
 
 ---Recover max amount of resource X
----@param entity Entity
+---@param entity EntityHandle
 ---@param resourceGuid GUIDSTRING
 ---@param subResource? integer
 function RefillActionResource(entity, resourceGuid, subResource)
@@ -51,7 +51,7 @@ function RefillActionResource(entity, resourceGuid, subResource)
 end
 
 ---Remove max amount of resource X
----@param entity Entity
+---@param entity EntityHandle
 ---@param resourceGuid GUIDSTRING
 ---@param subResource? integer
 function EmptyActionResource(entity, resourceGuid, subResource)

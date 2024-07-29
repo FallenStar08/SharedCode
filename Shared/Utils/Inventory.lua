@@ -7,7 +7,7 @@
 ---@alias DeepIterateOutput {[Guid] : DeepIterateElement}
 
 ---@class DeepIterateElement
----@field entity ItemEntity
+---@field entity EntityHandle
 ---@field template ROOT
 ---@field name string
 ---@field statsId string
@@ -19,7 +19,7 @@
 -- -------------------------------------------------------------------------- --
 
 ---format our inv element
----@param itemEntity ItemEntity
+---@param itemEntity EntityHandle
 ---@return DeepIterateElement
 local function formatInventoryObjectData(itemEntity)
     local uuid = itemEntity.Uuid and itemEntity.Uuid.EntityUuid
@@ -77,7 +77,7 @@ end
 
 --Todo add shallow iterate if needed
 --- Recursively iterates through an entity's inventory and all sub-inventories, building a table containing all items.
----@param entity? Entity The entity whose inventory to iterate
+---@param entity? EntityHandle The entity whose inventory to iterate
 ---@param processedInventory? table Table to accumulate results
 ---@param filterFuncs? DeepIterateFilter[] the filtering functions
 ---@return DeepIterateOutput? processedInventory Result table filtered or not
@@ -104,7 +104,9 @@ function DeepIterateInventory(entity, filterFuncs, processedInventory)
             for _, stackElement in pairs(itemStack) do
                 local stackData = formatInventoryObjectData(stackElement)
                 local stackUuid = stackElement.Uuid and stackElement.Uuid.EntityUuid
-                processedInventory[stackUuid] = stackData
+                if stackUuid then
+                    processedInventory[stackUuid] = stackData
+                end
             end
         elseif not StackMember and uuid and data then
             processedInventory[uuid] = data

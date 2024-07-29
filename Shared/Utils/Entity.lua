@@ -2,7 +2,7 @@
 --                               Entities stuff                               --
 -- -------------------------------------------------------------------------- --
 ---returns the entity's uuid
----@param entity EntityHandle|Entity
+---@param entity EntityHandle
 ---@return Guid|nil
 function EntityToUuid(entity)
     return Ext.Entity.HandleToUuid(entity)
@@ -10,7 +10,7 @@ end
 
 ---shortcut for Ext.Entity.Get(uuid)
 ---@param uuid Guid
----@return Entity?
+---@return EntityHandle?
 function _GE(uuid)
     if uuid then
         return Ext.Entity.Get(uuid)
@@ -55,8 +55,8 @@ function GetClosestEntitiesFromObjectByComponent(fromObject, component, minDista
 end
 
 ---Copy data from donor entity to target entity
----@param TargetEntity Entity the entity that'll receive data from the donor
----@param DonorEntity Entity the donor entity that splurge his data onto the target
+---@param TargetEntity EntityHandle the entity that'll receive data from the donor
+---@param DonorEntity EntityHandle the donor entity that splurge his data onto the target
 ---@param copyList table the list of components to copy from donor to target
 function CopyEntityData(TargetEntity, DonorEntity, copyList)
     if TargetEntity and DonorEntity then
@@ -86,7 +86,7 @@ end
 
 ---Nuke all statuses on an entity
 --TODO fix this shit and make it work on characters
----@param Entity Entity
+---@param Entity EntityHandle
 function ClearAllStatuses(Entity)
     if Entity and Entity.ServerItem and Entity.ServerItem.StatusManager then
         for index, data in ipairs(Entity.ServerItem.StatusManager.Statuses) do
@@ -96,9 +96,9 @@ function ClearAllStatuses(Entity)
 end
 
 ---Copy statuses from one entity to another, clear statuses from target beforehand
----@param TargetEntity Entity status will be applied to this entity
+---@param TargetEntity EntityHandle status will be applied to this entity
 --TODO fix this shit and make it work on characters
----@param DonorEntity Entity statuses will come from this entity
+---@param DonorEntity EntityHandle statuses will come from this entity
 function CopyStatuses(TargetEntity, DonorEntity)
     local targetUuid = EntityToUuid(TargetEntity)
     ClearAllStatuses(TargetEntity)
@@ -117,7 +117,7 @@ function CopyStatuses(TargetEntity, DonorEntity)
 end
 
 ---Returns a list of statuses applied on the target entity
----@param Entity Entity?
+---@param Entity EntityHandle?
 ---@return table<string,boolean>
 function GetAppliedStatus(Entity)
     if not Entity then return {} end
@@ -132,7 +132,7 @@ function GetAppliedStatus(Entity)
 end
 
 ---Check if target entity is affected by a given status
----@param Entity Entity
+---@param Entity EntityHandle
 ---@param statusName string
 ---@return boolean
 function HasStatus(Entity, statusName)

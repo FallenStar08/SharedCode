@@ -126,7 +126,7 @@ end
 ---@return table table the modified table
 function Table.Map(table, fun)
     local t = {}
-    for k, v in pairs(table) do
+    for k, v in ipairs(table) do
         t[k] = fun(v)
     end
     return t
