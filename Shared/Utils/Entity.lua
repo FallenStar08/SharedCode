@@ -19,6 +19,8 @@ function _GE(uuid)
     end
 end
 
+
+
 --- Retrieves entities uuid with a specified component within a given distance from a reference object.
 
 ---@param fromObject? string The reference object from which to measure distances. If nil, the host character is used.
