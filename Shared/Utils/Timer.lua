@@ -27,7 +27,7 @@ function DelayedCall(ms, func)
     end)
 end
 
----Bouncy bounce
+---Debounce function call
 ---@param fn function the callback
 ---@param delay number delay in sec
 ---@return function

@@ -28,6 +28,9 @@ function ConcatPrefix(prefix, message)
     end
 end
 
+
+
+
 --Blatantly stolen from KvCampEvents, mine now
 local function ConcatOutput(...)
     local varArgs = { ... }

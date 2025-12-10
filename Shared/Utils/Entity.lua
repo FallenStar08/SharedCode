@@ -20,7 +20,6 @@ function _GE(uuid)
 end
 
 
-
 --- Retrieves entities uuid with a specified component within a given distance from a reference object.
 
 ---@param fromObject? string The reference object from which to measure distances. If nil, the host character is used.
@@ -70,6 +69,7 @@ function CopyEntityData(TargetEntity, DonorEntity, copyList)
         BasicError("CopyEntityData() Error here")
     end
 end
+
 
 ---Try to copy component data from donor to target using serialize
 ---@param target BaseComponent component that'll be overwritten
