@@ -50,15 +50,15 @@ end
 ---Check if string contains a substring
 ---@param str string the string to check
 ---@param substr string the substring
----@param caseSensitive? boolean 
+---@param caseSensitive? boolean
 ---@return boolean
-function StringContains(str, substr,caseSensitive)
-    caseSensitive=caseSensitive or false
+function StringContains(str, substr, caseSensitive)
+    caseSensitive = caseSensitive or false
     if caseSensitive then
         return string.find(str, substr, 1, true) ~= nil
     else
-        str=string.lower(str)
-        substr=string.lower(substr)
+        str = string.lower(str)
+        substr = string.lower(substr)
         return string.find(str, substr, 1, true) ~= nil
     end
 end
@@ -72,4 +72,27 @@ function RemoveTextBefore(input, text)
             return nil
         end
     end
+end
+
+function GenerateUUID()
+    local function randHex(n)
+        local t = {}
+        for i = 1, n do
+            t[i] = string.format("%x", math.random(0, 15))
+        end
+        return table.concat(t)
+    end
+
+    local timeHiAndVersion = string.format("4%x", math.random(0, 0x0fff))
+    local clockSeqHi = string.format("%x", math.random(8, 11))
+
+    return string.format(
+        "%s-%s-%s-%s%s-%s",
+        randHex(8),
+        randHex(4),
+        timeHiAndVersion,
+        clockSeqHi,
+        randHex(3),
+        randHex(12)
+    )
 end
